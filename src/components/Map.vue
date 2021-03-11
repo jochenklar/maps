@@ -21,9 +21,9 @@
       setupLeafletMap: function () {
         if (this.map === null) {
           this.map = L.map("map")
+          this.map.setView(this.currentView.center, this.currentView.zoom)
         }
 
-        this.map.setView(this.currentView.center, this.currentView.zoom)
         L.tileLayer(this.currentMap.url, this.currentMap.options).addTo(this.map)
       }
     },
