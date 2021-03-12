@@ -1,46 +1,94 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button"
-              data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ currentMap.name }}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li v-for="(map, index) in maps" :key="index">
-                <a class="dropdown-item" href="#" @click.prevent="changeMap(index)">{{ map.name }}</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
+  <nav>
+    <select v-model="currentMapIndex" @update="changeMap(index)">
+      <option v-for="(map, index) in maps" :key="index" :value="index">
+        {{ map.name }}
+      </option>
+    </select>
+
+    <form @submit.prevent="searchLocation()">
+      <input type="search" placeholder="Search address" v-model="searchString" />
+    </form>
   </nav>
 </template>
 
 <script>
   export default {
     name: 'Navbar',
-    props: ['maps', 'currentMap'],
-    methods: {
-      changeMap(index) {
+    props: {
+      maps: Array,
+      map: Object
+    },
+    data() {
+      return {
+        currentMapIndex: this.maps.indexOf(this.map),
+        searchString: ''
+      }
+    },
+    watch: {
+      currentMapIndex: function(index) {
         this.$emit('changeMap', index)
+      }
+    },
+    methods: {
+      searchLocation: function() {
+        if (this.searchString) {
+          const url = 'https://nominatim.openstreetmap.org/search?format=json&q=Berlin ' + encodeURIComponent(this.searchString)
+          fetch(url)
+            .then(response => response.json())
+            .then(json => {
+              if (json.length > 0) {
+                this.$emit('changeCenter', [json[0].lat, json[0].lon])
+              }
+            })
+        }
       }
     }
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  nav {
+    background-color: black;
+    color: white;
 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 40px;
+
+    padding: 0 10px;
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+
+      .brand {
+        display: block;
+        line-height: 20px;
+        margin-right: 20px;
+      }
+    }
+
+    select {
+      background-color: white;
+    }
+
+    input[type="search"] {
+      width: 400px;
+    }
+
+    select,
+    input[type="search"] {
+      padding-left: 4px;
+      margin: 0;
+      height: 24px;
+      border: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 </style>

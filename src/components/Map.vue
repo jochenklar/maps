@@ -3,33 +3,40 @@
 </template>
 
 <script>
-  import "leaflet/dist/leaflet.css";
-  import L from "leaflet";
+  import 'leaflet/dist/leaflet.css'
+  import L from 'leaflet'
 
   export default {
     name: 'Map',
     props: {
-      currentView: Object,
-      currentMap: Object
+      map: Object,
+      center: Array,
+      zoom: Number
     },
     data() {
       return {
-        map: null
+        leafletMap: null
       }
     },
     methods: {
-      setupLeafletMap: function () {
-        if (this.map === null) {
-          this.map = L.map("map")
-          this.map.setView(this.currentView.center, this.currentView.zoom)
-        }
-
-        L.tileLayer(this.currentMap.url, this.currentMap.options).addTo(this.map)
+      setupLeafletMap: function() {
+        this.leafletMap = L.map('map')
+        this.changeView()
+        this.changeMap()
+      },
+      changeMap: function() {
+        L.tileLayer(this.map.url, this.map.options).addTo(this.leafletMap)
+      },
+      changeView: function() {
+        this.leafletMap.setView(this.center, this.zoom)
       }
     },
     watch: {
-      currentMap() {
-        this.setupLeafletMap()
+      map() {
+        this.changeMap()
+      },
+      center() {
+        this.changeView()
       }
     },
     mounted() {
@@ -42,7 +49,7 @@
   #map {
     position: absolute;
     width: 100%;
-    top: 55px;
+    top: 40px;
     bottom: 0;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <Navbar :maps="maps" :currentView="currentView" :currentMap="currentMap" @changeMap="changeMap" />
-  <Map :currentView="currentView" :currentMap="currentMap" />
+  <Navbar :maps="maps" :map="map" @changeMap="changeMap" @changeCenter="changeCenter"/>
+  <Map :map="map" :center="center" :zoom="zoom" />
 </template>
 
 <script>
@@ -12,8 +12,9 @@
     data() {
       return {
         maps: this.$config.maps,
-        currentView: this.$config.view,
-        currentMap: this.$config.maps[0],
+        map: this.$config.maps[0],
+        center: this.$config.view.center,
+        zoom: this.$config.view.zoom
       }
     },
     components: {
@@ -22,8 +23,19 @@
     },
     methods: {
       changeMap(index) {
-        this.currentMap = this.maps[index]
+        this.map = this.maps[index]
+      },
+      changeCenter(center) {
+        this.center = center
       }
     }
   }
 </script>
+
+<style lang="scss">
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
