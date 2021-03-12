@@ -38,4 +38,9 @@
     margin: 0;
     padding: 0;
   }
+  .app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
 </style>

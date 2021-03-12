@@ -48,17 +48,19 @@
 </script>
 
 <style lang="scss" scoped>
+  $break-point: 576px;
+
   nav {
     background-color: black;
     color: white;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 10px 10px;
 
-    height: 40px;
-
-    padding: 0 10px;
+    @media (min-width: $break-point) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
     .nav-left {
       display: flex;
@@ -73,6 +75,7 @@
 
     select {
       background-color: white;
+      margin-bottom: 10px;
     }
 
     input[type="search"] {
@@ -82,12 +85,17 @@
     select,
     input[type="search"] {
       padding-left: 4px;
-      margin: 0;
       height: 24px;
+      width: 100%;
       border: none;
 
       &:focus {
         outline: none;
+      }
+
+      @media (min-width: $break-point) {
+        width: 200px;
+        margin-bottom: 0;
       }
     }
   }
