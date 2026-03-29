@@ -1,0 +1,27 @@
+repos:
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.39.1
+    hooks:
+      - id: eslint
+        args: [--fix, --color]
+        additional_dependencies:
+          - eslint@9.30.1
+          - eslint-plugin-react@7.37.0
+          - eslint-plugin-simple-import-sort@12.1.1
+          - react@18.3.1
+
+  - repo: https://github.com/crate-ci/typos
+    rev: 5745f2a8dd91cd7b684680e2e10a2b388ba6e5cf  # frozen: v1
+    hooks:
+    - id: typos
