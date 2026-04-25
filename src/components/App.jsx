@@ -1,21 +1,18 @@
-import React, { useRef } from 'react'
-import { isUndefined, omit, uniqueId } from 'lodash'
+import React, { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { isUndefined } from 'lodash'
 
-import { useLocalStorage } from '../hooks/ls'
+import { useConfig } from '../stores/config'
+import { usePanes } from '../stores/panes'
 
 import Nav from './Nav.jsx'
 import PaneContainer from './PaneContainer.jsx'
 
-const createPane = (id, parentId = null, level = 0) => ({
-  id,
-  parentId,
-  level,
-  direction: null,
-  children: [],
-})
+const App = ({ config }) => {
+  const init = useConfig((s) => s.init)
+  useEffect(() => init(config), [init, config])
 
-const App = () => {
-  const [panes, setPanes] = useLocalStorage('panes', { root: createPane('root') })
+  const panes = usePanes((state) => state.panes)
   const mapRefs = useRef({})
   const isSyncing = useRef(false)
 
@@ -41,40 +38,6 @@ const App = () => {
       if (old?.__dblclickHandler) old.off('dblclick', old.__dblclickHandler)
       delete mapRefs.current[id]
     }
-  }
-
-  const handleSplit = (pane, direction) => {
-    setPanes((prev) => {
-      const id1 = uniqueId('node')
-      const id2 = uniqueId('node')
-
-      return  {
-        ...prev,
-        [id1]: createPane(id1, pane.id, pane.level + 1),
-        [id2]: createPane(id2, pane.id, pane.level + 1),
-        [pane.id]: {
-          ...prev[pane.id],
-          direction,
-          children: [id1, id2],
-        },
-      }
-    })
-  }
-
-  const handleRemove = (pane) => {
-    setPanes((prev) => {
-      const parentId = prev[pane.id].parentId
-      const parent = prev[parentId]
-
-      return {
-        ...omit(prev, parent.children),
-        [parentId]: {
-          ...prev[parentId],
-          direction: null,
-          children: [],
-        },
-      }
-    })
   }
 
   const handleZoom = (delta, center) => {
@@ -112,12 +75,14 @@ const App = () => {
           id="root"
           panes={panes}
           setMapRef={setMapRef}
-          onSplit={handleSplit}
-          onRemove={handleRemove}
         />
       </div>
     </main>
   )
+}
+
+App.propTypes = {
+  config: PropTypes.object
 }
 
 export default App

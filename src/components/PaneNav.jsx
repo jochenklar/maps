@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const PaneNav = ({ pane, onSplit, onRemove }) => {
+import { usePanes } from '../stores/panes'
+
+const PaneNav = ({ pane }) => {
+  const splitPane = usePanes((state) => state.splitPane)
+  const removePane = usePanes((state) => state.removePane)
+
   return (
     <nav className="position-absolute bottom-0 d-flex">
       <div className="ms-3 mb-3">
@@ -13,10 +18,10 @@ const PaneNav = ({ pane, onSplit, onRemove }) => {
           {
             pane.level < 3 && (
               <>
-                <button className="btn btn-outline-secondary" onClick={() => onSplit(pane, 'vertical')}>
+                <button className="btn btn-outline-secondary" onClick={() => splitPane(pane, 'vertical')}>
                   <i className="bi bi-arrows-expand-vertical"></i>
                 </button>
-                <button className="btn btn-outline-secondary" onClick={() => onSplit(pane, 'horizontal')}>
+                <button className="btn btn-outline-secondary" onClick={() => splitPane(pane, 'horizontal')}>
                   <i className="bi bi-arrows-expand"></i>
                 </button>
               </>
@@ -24,7 +29,7 @@ const PaneNav = ({ pane, onSplit, onRemove }) => {
           }
           {
             pane.level > 0 && (
-              <button className="btn btn-outline-secondary" onClick={() => onRemove(pane)}>
+              <button className="btn btn-outline-secondary" onClick={() => removePane(pane)}>
                 <i className="bi bi-x-lg"></i>
               </button>
             )
@@ -36,9 +41,7 @@ const PaneNav = ({ pane, onSplit, onRemove }) => {
 }
 
 PaneNav.propTypes = {
-  pane: PropTypes.object,
-  onSplit: PropTypes.func,
-  onRemove: PropTypes.func,
+  pane: PropTypes.object
 }
 
 export default PaneNav

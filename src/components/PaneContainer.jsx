@@ -3,17 +3,12 @@ import PropTypes from 'prop-types'
 
 import Pane from './Pane.jsx'
 
-const PaneContainer = ({ id, panes, setMapRef, onSplit, onRemove }) => {
+const PaneContainer = ({ id, panes, setMapRef }) => {
   const pane = panes[id]
 
   if (pane.children.length === 0) {
     return (
-      <Pane
-        pane={pane}
-        setMapRef={setMapRef}
-        onSplit={onSplit}
-        onRemove={onRemove}
-      />
+      <Pane pane={pane} mapRef={setMapRef(pane.id)} />
     )
   }
 
@@ -32,8 +27,6 @@ const PaneContainer = ({ id, panes, setMapRef, onSplit, onRemove }) => {
             id={childId}
             panes={panes}
             setMapRef={setMapRef}
-            onSplit={onSplit}
-            onRemove={onRemove}
           />
         ))
       }
@@ -44,9 +37,7 @@ const PaneContainer = ({ id, panes, setMapRef, onSplit, onRemove }) => {
 PaneContainer.propTypes = {
   id: PropTypes.number,
   panes: PropTypes.array,
-  setMapRef: PropTypes.func,
-  onSplit: PropTypes.func,
-  onRemove: PropTypes.func,
+  setMapRef: PropTypes.func
 }
 
 export default PaneContainer

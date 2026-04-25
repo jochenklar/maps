@@ -4,31 +4,20 @@ import PropTypes from 'prop-types'
 import Map from './Map.jsx'
 import PaneNav from './PaneNav.jsx'
 
-const Pane = ({ pane, setMapRef, onSplit, onRemove }) => {
+const Pane = ({ pane, mapRef }) => {
   return (
     <section className="position-relative flex-fill">
       <div className="pane h-100">
-        <Map
-          map={pane.map}
-          mapRef={setMapRef(pane.id)}
-          center={[52, 13]}
-          zoom={10}
-        />
+        <Map mapRef={mapRef} />
       </div>
-      <PaneNav
-        pane={pane}
-        onSplit={onSplit}
-        onRemove={onRemove}
-      />
+      <PaneNav pane={pane} mapRef={mapRef} />
     </section>
   )
 }
 
 Pane.propTypes = {
   pane: PropTypes.object,
-  setMapRef: PropTypes.func,
-  onSplit: PropTypes.func,
-  onRemove: PropTypes.func
+  mapRef: PropTypes.func
 }
 
 export default Pane
