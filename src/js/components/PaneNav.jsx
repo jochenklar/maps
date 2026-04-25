@@ -1,3 +1,6 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
 const PaneNav = ({ pane, onSplit, onRemove }) => {
   return (
     <nav className="position-absolute bottom-0 d-flex">
@@ -30,6 +33,12 @@ const PaneNav = ({ pane, onSplit, onRemove }) => {
       </div>
     </nav>
   )
+}
+
+PaneNav.propTypes = {
+  pane: PropTypes.object,
+  onSplit: PropTypes.func,
+  onRemove: PropTypes.func,
 }
 
 export default PaneNav

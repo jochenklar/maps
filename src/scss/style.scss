@@ -2,6 +2,14 @@ body {
     background-color: #efefef;
 }
 
+nav {
+    z-index: 500;
+}
+
+.btn {
+    --bs-btn-bg: white;
+}
+
 .search-group {
     width: 40%;
 }

@@ -88,5 +88,10 @@ export default defineConfig([
       ],
       'jsx-quotes': ['error', 'prefer-double'],
     },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
   },
 ])
