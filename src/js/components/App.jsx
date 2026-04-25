@@ -1,5 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { isUndefined, omit, uniqueId } from 'lodash'
+
+import { useLocalStorage } from '../hooks/ls'
 
 import Nav from './Nav.jsx'
 import PaneContainer from './PaneContainer.jsx'
@@ -13,7 +15,7 @@ const createPane = (id, parentId = null, level = 0) => ({
 })
 
 const App = () => {
-  const [panes, setPanes] = useState({ root: createPane('root') })
+  const [panes, setPanes] = useLocalStorage('panes', { root: createPane('root') })
   const mapRefs = useRef({})
   const isSyncing = useRef(false)
 
