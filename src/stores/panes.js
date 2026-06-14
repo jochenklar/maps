@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
-import { uniqueId } from 'lodash'
 
 const createPane = (id, parentId = null, level = 0, map = [0, 0]) => {
   return {
@@ -22,8 +21,8 @@ export const usePanes = create(
       },
       splitPane: (pane, direction) =>
         set((state) => {
-          const id1 = uniqueId('node')
-          const id2 = uniqueId('node')
+          const id1 = crypto.randomUUID()
+          const id2 = crypto.randomUUID()
 
           state.panes[id1] = createPane(id1, pane.id, pane.level + 1, pane.map)
           state.panes[id2] = createPane(id2, pane.id, pane.level + 1, pane.map)

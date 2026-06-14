@@ -6,6 +6,6 @@ export const useUI = create(
     showMapModal: false,
     currentPane: null,
     openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
-    closeMapModal: (pane) => set({ showMapModal: false, currentPane: null }),
+    closeMapModal: () => set({ showMapModal: false, currentPane: null }),
   })),
 )
