@@ -9,7 +9,7 @@ import 'leaflet/dist/leaflet.css'
 const Map = ({ mapRef }) => {
   const config = useConfig()
 
-  return config.maps && config.view && (
+  return config.groups && config.view && (
     <MapContainer
       ref={mapRef}
       center={config.view.center}
@@ -19,8 +19,8 @@ const Map = ({ mapRef }) => {
       doubleClickZoom={false}
     >
       <TileLayer
-        attribution={config.maps[0].options?.attribution}
-        url={config.maps[0].url}
+        attribution={config.groups[0].maps[0].options?.attribution}
+        url={config.groups[0].maps[0].url}
       />
     </MapContainer>
   )

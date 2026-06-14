@@ -5,11 +5,14 @@ import { isUndefined } from 'lodash'
 import { useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 
+import MapModal  from './MapModal.jsx'
 import Nav from './Nav.jsx'
 import PaneContainer from './PaneContainer.jsx'
 
 const App = ({ config }) => {
   const init = useConfig((s) => s.init)
+  const groups = useConfig((s) => s.groups)
+
   useEffect(() => init(config), [init, config])
 
   const panes = usePanes((state) => state.panes)
@@ -67,7 +70,7 @@ const App = ({ config }) => {
     isSyncing.current = false
   }
 
-  return (
+  return groups && (
     <main>
       <Nav onZoom={handleZoom} />
       <div className="d-flex vh-100">
@@ -77,6 +80,7 @@ const App = ({ config }) => {
           setMapRef={setMapRef}
         />
       </div>
+      <MapModal />
     </main>
   )
 }

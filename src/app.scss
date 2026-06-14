@@ -18,3 +18,21 @@ nav {
     background-color: silver;
 }
 
+.map-card {
+    cursor: pointer;
+
+    .card-img-top {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 6rem;
+    }
+
+    .card-text {
+        font-size: .75rem;
+    }
+
+    &:hover {
+        border-color: var(--bs-primary);
+    }
+}
