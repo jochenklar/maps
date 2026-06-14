@@ -13,9 +13,9 @@ const PaneContainer = ({ id, panes, setMapRef }) => {
   }
 
   const directionClass = pane.direction === 'horizontal' ? (
-    'd-flex flex-column flex-fill'
+    'pane-container d-flex flex-column flex-fill'
   ) : (
-    'd-flex flex-row flex-fill'
+    'pane-container d-flex flex-row flex-fill'
   )
 
   return (

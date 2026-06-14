@@ -1,5 +1,5 @@
 body {
-    background-color: #efefef;
+    background-color: var(--bs-secondary);
 }
 
 nav {
@@ -14,8 +14,8 @@ nav {
     width: 40%;
 }
 
-.pane {
-    background-color: silver;
+.pane-container {
+    gap: 1px;
 }
 
 .map-card {
