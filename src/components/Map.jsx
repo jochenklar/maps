@@ -6,10 +6,13 @@ import { useConfig } from '../stores/config'
 
 import 'leaflet/dist/leaflet.css'
 
-const Map = ({ mapRef }) => {
+const Map = ({ mapRef, pane }) => {
   const config = useConfig()
 
-  return config.groups && config.view && (
+  const [groupIndex, mapIndex] = pane.map
+  const map = config.groups?.[groupIndex].maps?.[mapIndex]
+
+  return map && (
     <MapContainer
       ref={mapRef}
       center={config.view.center}
@@ -18,16 +21,14 @@ const Map = ({ mapRef }) => {
       zoomControl={false}
       doubleClickZoom={false}
     >
-      <TileLayer
-        attribution={config.groups[0].maps[0].options?.attribution}
-        url={config.groups[0].maps[0].url}
-      />
+      <TileLayer url={map.url} attribution={map.attribution} />
     </MapContainer>
   )
 }
 
 Map.propTypes = {
-  mapRef: PropTypes.object
+  mapRef: PropTypes.object,
+  pane: PropTypes.object
 }
 
 export default Map

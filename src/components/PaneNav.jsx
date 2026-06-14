@@ -12,7 +12,7 @@ const PaneNav = ({ pane }) => {
   return (
     <nav className="position-absolute bottom-0 d-flex">
       <div className="ms-3 mb-3">
-        <button className="btn btn-outline-secondary" onClick={openMapModal}>
+        <button className="btn btn-outline-secondary" onClick={() => openMapModal(pane)}>
           <i className="bi bi-map"></i>
         </button>
 

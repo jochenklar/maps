@@ -8,9 +8,9 @@ const Pane = ({ pane, mapRef }) => {
   return (
     <section className="position-relative flex-fill">
       <div className="pane h-100">
-        <Map mapRef={mapRef} />
+        <Map mapRef={mapRef} pane={pane} />
       </div>
-      <PaneNav pane={pane} mapRef={mapRef} />
+      <PaneNav pane={pane} />
     </section>
   )
 }
