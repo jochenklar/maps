@@ -20,8 +20,15 @@ const Map = ({ mapRef, pane }) => {
       style={{ height: '100%', width: '100%' }}
       zoomControl={false}
       doubleClickZoom={false}
+      minZoom={map.options.minZoom}
+      maxZoom={map.options.maxZoom}
     >
-      <TileLayer url={map.url} attribution={map.attribution} />
+      <TileLayer
+        url={map.url}
+        attribution={map.options.attribution}
+        minZoom={map.options.minZoom}
+        maxZoom={map.options.maxZoom}
+      />
     </MapContainer>
   )
 }
