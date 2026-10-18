@@ -77,9 +77,25 @@ const App = ({ config }) => {
     isSyncing.current = false
   }
 
+  const handleGeolocate = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const center = [position.coords.latitude, position.coords.longitude]
+      const zoom = 12
+
+      isSyncing.current = true
+      Object.values(mapRefs.current).forEach((map) => {
+        map.setView(center, zoom, { animate: false })
+      })
+      isSyncing.current = false
+
+      setView({ center, zoom })
+    },
+    () => console.warn('geolocation failed'))
+  }
+
   return groups && (
     <main>
-      <Nav onZoom={handleZoom} />
+      <Nav onZoom={handleZoom} onGeolocate={handleGeolocate} />
       <div className="d-flex vh-100">
         <PaneContainer
           id="root"

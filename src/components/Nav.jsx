@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Nav = ({ onZoom }) => {
+const Nav = ({ onZoom, onGeolocate }) => {
   return (
     <nav className="position-absolute top-0 w-100 d-flex">
       <div className="search-group input-group mt-3 ms-3 me-auto">
@@ -20,7 +20,7 @@ const Nav = ({ onZoom }) => {
         <button className="btn btn-outline-secondary" onClick={() => onZoom(-1)} >
           <i className="bi bi-dash-lg"></i>
         </button>
-        <button className="btn btn-outline-secondary">
+        <button className="btn btn-outline-secondary" onClick={onGeolocate}>
           <i className="bi bi-geo-alt"></i>
         </button>
       </div>
@@ -29,7 +29,8 @@ const Nav = ({ onZoom }) => {
 }
 
 Nav.propTypes = {
-  onZoom: PropTypes.func
+  onZoom: PropTypes.func,
+  onGeolocate: PropTypes.func
 }
 
 export default Nav
