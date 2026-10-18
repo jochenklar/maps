@@ -12,6 +12,7 @@ import PaneContainer from './PaneContainer.jsx'
 const App = ({ config }) => {
   const init = useConfig((s) => s.init)
   const groups = useConfig((s) => s.groups)
+  const setView = useConfig((s) => s.setView)
 
   useEffect(() => init(config), [init, config])
 
@@ -26,6 +27,7 @@ const App = ({ config }) => {
       const moveHandler = () => {
         if (isSyncing.current) return
         handleSync(id)
+        setView({ center: map.getCenter(), zoom: map.getZoom() })
       }
       const dblclickHandler = (e) => handleZoom(1, e.latlng)
       map.on('move', moveHandler)
@@ -44,6 +46,9 @@ const App = ({ config }) => {
   }
 
   const handleZoom = (delta, center) => {
+    const source = Object.values(mapRefs.current)[0]
+    if (!source) return
+
     isSyncing.current = true
     Object.values(mapRefs.current).forEach((map) => {
       if (isUndefined(center)) {
@@ -53,6 +58,8 @@ const App = ({ config }) => {
       }
     })
     isSyncing.current = false
+
+    setView({ center: source.getCenter(), zoom: source.getZoom() })
   }
 
   const handleSync = (sourceId) => {
