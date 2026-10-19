@@ -43,6 +43,12 @@ nav {
     gap: 1px;
 }
 
+// keep the attribution clear of the pane buttons in the lower left corner (at most 4 buttons and the margins),
+// in narrow panes it wraps into more lines instead
+.leaflet-bottom.leaflet-right {
+    max-width: calc(100% - 200px);
+}
+
 .leaflet-grid-pane {
     z-index: 450;
     pointer-events: none;
