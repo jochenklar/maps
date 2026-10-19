@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
-import { geolocateMaps, setMapRef, setMapsView, zoomMaps } from '../utils/maps'
+import { fitMapsToBounds, geolocateMaps, setMapRef, setMapsView, zoomMaps } from '../utils/maps'
+import { getPlaceBounds } from '../utils/search'
 import { syncUrl } from '../utils/url'
 
 import MapModal  from './MapModal.jsx'
@@ -14,7 +15,8 @@ import PaneContainer from './PaneContainer.jsx'
 const App = ({ config }) => {
   const init = useConfig((s) => s.init)
   const groups = useConfig((s) => s.groups)
-  const maxZoom = useConfig((s) => s.geolocate?.maxZoom)
+  const geolocateMaxZoom = useConfig((s) => s.geolocate?.maxZoom)
+  const searchMaxZoom = useConfig((s) => s.search?.maxZoom)
 
   const panes = usePanes((state) => state.panes)
 
@@ -40,7 +42,8 @@ const App = ({ config }) => {
     <main>
       <Nav
         onZoom={(delta) => zoomMaps(mapsRef, delta)}
-        onGeolocate={() => geolocateMaps(mapsRef, maxZoom)}
+        onSearch={(place) => fitMapsToBounds(mapsRef, getPlaceBounds(place), searchMaxZoom)}
+        onGeolocate={() => geolocateMaps(mapsRef, geolocateMaxZoom)}
         onReset={handleReset}
       />
       <div className="d-flex vh-100">

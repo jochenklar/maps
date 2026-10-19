@@ -4,7 +4,9 @@ import classNames from 'classnames'
 
 import { useUI } from '../stores/ui'
 
-const Nav = ({ onZoom, onGeolocate, onReset }) => {
+import Search from './Search.jsx'
+
+const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const showGrid = useUI((s) => s.showGrid)
   const toggleGrid = useUI((s) => s.toggleGrid)
   const showCrosshair = useUI((s) => s.showCrosshair)
@@ -12,14 +14,7 @@ const Nav = ({ onZoom, onGeolocate, onReset }) => {
 
   return (
     <nav className="position-absolute top-0 w-100 d-flex">
-      <div className="search-group input-group mt-3 ms-3 me-auto">
-        <input
-          type="text" className="form-control border border-secondary" placeholder="Search"
-          aria-label="Search" aria-describedby="search-button" />
-        <button className="btn btn-outline-secondary" type="button" id="search-button">
-          <i className="bi bi-search"></i>
-        </button>
-      </div>
+      <Search onSelect={onSearch} />
 
       <div className="btn-group mt-3 me-3">
         <button className="btn btn-outline-secondary" onClick={() => onZoom(1)} >
@@ -49,6 +44,7 @@ const Nav = ({ onZoom, onGeolocate, onReset }) => {
 }
 
 Nav.propTypes = {
+  onSearch: PropTypes.func,
   onZoom: PropTypes.func,
   onGeolocate: PropTypes.func,
   onReset: PropTypes.func

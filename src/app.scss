@@ -14,6 +14,19 @@ nav {
     width: 40%;
 }
 
+.search-results {
+    max-height: 60vh;
+    overflow-y: auto;
+
+    .list-group-item {
+        font-size: .875rem;
+    }
+
+    .search-attribution {
+        font-size: .75rem;
+    }
+}
+
 .pane-container {
     gap: 1px;
 }

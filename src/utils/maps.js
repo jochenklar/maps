@@ -42,18 +42,24 @@ const zoomMaps = (mapsRef, delta, center) => {
   storeView(source)
 }
 
+// move all maps to the center of the bounds and zoom so that the bounds fit into the map,
+// but not further than maxZoom
+const fitMapsToBounds = (mapsRef, bounds, maxZoom = Infinity) => {
+  const source = getFirstMap(mapsRef)
+  if (!source) return
+
+  const { lat, lng } = bounds.getCenter()
+  const zoom = Math.min(source.getBoundsZoom(bounds), maxZoom)
+
+  setMapsView(mapsRef, [lat, lng], zoom)
+}
+
 // move all maps to the current position, zoom so that the accuracy circle (radius in meters)
 // fits into the map, but not further than maxZoom
-const geolocateMaps = (mapsRef, maxZoom = Infinity) => {
+const geolocateMaps = (mapsRef, maxZoom) => {
   navigator.geolocation.getCurrentPosition((position) => {
-    const source = getFirstMap(mapsRef)
-    if (!source) return
-
-    const center = [position.coords.latitude, position.coords.longitude]
-    const bounds = latLng(center).toBounds(position.coords.accuracy * 2)
-    const zoom = Math.min(source.getBoundsZoom(bounds), maxZoom)
-
-    setMapsView(mapsRef, center, zoom)
+    const center = latLng(position.coords.latitude, position.coords.longitude)
+    fitMapsToBounds(mapsRef, center.toBounds(position.coords.accuracy * 2), maxZoom)
   },
   () => console.warn('geolocation failed'))
 }
@@ -92,4 +98,4 @@ const setMapRef = (mapsRef, id) => (map) => {
   }
 }
 
-export { geolocateMaps, setMapRef, setMapsView, zoomMaps }
+export { fitMapsToBounds, geolocateMaps, setMapRef, setMapsView, zoomMaps }
