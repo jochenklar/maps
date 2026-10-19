@@ -1,7 +1,7 @@
 import { latLng } from 'leaflet'
 import { isUndefined } from 'lodash'
 
-import { useConfig } from '../stores/config'
+import { useUI } from '../stores/ui'
 
 // all functions take mapsRef, a ref to { maps, isSyncing } (see App.jsx), where maps are the leaflet
 // maps of all panes by pane id, and isSyncing is true while the maps are moved from here,
@@ -16,13 +16,14 @@ const forEachMap = (mapsRef, callback) => {
 }
 
 const storeView = (map) => {
-  useConfig.getState().setView({ center: map.getCenter(), zoom: map.getZoom() })
+  const { lat, lng } = map.getCenter()
+  useUI.getState().setView({ center: [lat, lng], zoom: map.getZoom() })
 }
 
 // move all maps without syncing and store the view
 const setMapsView = (mapsRef, center, zoom) => {
   forEachMap(mapsRef, (map) => map.setView(center, zoom, { animate: false }))
-  useConfig.getState().setView({ center, zoom })
+  useUI.getState().setView({ center, zoom })
 }
 
 // zoom all maps by delta, around center if given

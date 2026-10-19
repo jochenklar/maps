@@ -2,6 +2,7 @@ import { debounce } from 'lodash'
 
 import { findMap, useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
+import { useUI } from '../stores/ui'
 
 import { formatHash, parseHash } from './hash'
 import { setMapsView } from './maps'
@@ -17,7 +18,8 @@ const applyHash = (mapsRef) => {
 // write the panes and the view to the url hash, so that the url can be shared,
 // debounced since the view changes with every move and browsers limit replaceState
 const writeHash = debounce(() => {
-  const { view, groups } = useConfig.getState()
+  const { groups, view: configView } = useConfig.getState()
+  const view = useUI.getState().view ?? configView
   const { panes } = usePanes.getState()
   const getMapId = (id) => findMap(groups, id)?.id
   window.history.replaceState(null, '', formatHash({ view, panes, getMapId }))
@@ -30,12 +32,12 @@ const syncUrl = (mapsRef) => {
   applyHash(mapsRef)
   writeHash()
 
-  const unsubscribeConfig = useConfig.subscribe(writeHash)
+  const unsubscribeUI = useUI.subscribe(writeHash)
   const unsubscribePanes = usePanes.subscribe(writeHash)
   window.addEventListener('hashchange', handleHashChange)
 
   return () => {
-    unsubscribeConfig()
+    unsubscribeUI()
     unsubscribePanes()
     window.removeEventListener('hashchange', handleHashChange)
     writeHash.cancel()

@@ -13,13 +13,17 @@ const Map = ({ mapRef, pane }) => {
   const config = useConfig()
   const showGrid = useUI((s) => s.showGrid)
 
+  // the view is only used when the map is created, so it is read without subscribing,
+  // otherwise all maps would re-render on every move
+  const view = useUI.getState().view ?? config.view
+
   const map = findMap(config.groups, pane.map)
 
   return map && (
     <MapContainer
       ref={mapRef}
-      center={config.view.center}
-      zoom={config.view.zoom}
+      center={view.center}
+      zoom={view.zoom}
       style={{ height: '100%', width: '100%' }}
       zoomControl={false}
       doubleClickZoom={false}
