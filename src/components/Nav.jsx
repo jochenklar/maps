@@ -7,6 +7,8 @@ import { useUI } from '../stores/ui'
 const Nav = ({ onZoom, onGeolocate }) => {
   const showGrid = useUI((s) => s.showGrid)
   const toggleGrid = useUI((s) => s.toggleGrid)
+  const showCrosshair = useUI((s) => s.showCrosshair)
+  const toggleCrosshair = useUI((s) => s.toggleCrosshair)
 
   return (
     <nav className="position-absolute top-0 w-100 d-flex">
@@ -31,6 +33,12 @@ const Nav = ({ onZoom, onGeolocate }) => {
         </button>
         <button className={classNames('btn btn-outline-secondary', { active: showGrid })} onClick={toggleGrid}>
           <i className="bi bi-grid-3x3"></i>
+        </button>
+        <button
+          className={classNames('btn btn-outline-secondary', { active: showCrosshair })}
+          onClick={toggleCrosshair}
+        >
+          <i className="bi bi-crosshair"></i>
         </button>
       </div>
     </nav>

@@ -28,6 +28,24 @@ nav {
     }
 }
 
+// with a dark halo, so that it is visible on dark and light maps
+.crosshair {
+    z-index: 450;
+    width: 80px;
+    height: 80px;
+    color: white;
+    stroke-width: 2px;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, .8));
+
+    .crosshair-dot {
+        r: 5%;
+    }
+
+    .crosshair-bubble {
+        r: 5%;
+    }
+}
+
 .map-card {
     cursor: pointer;
 
