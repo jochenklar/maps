@@ -3,11 +3,15 @@ import PropTypes from 'prop-types'
 import { MapContainer, TileLayer } from 'react-leaflet'
 
 import { useConfig } from '../stores/config'
+import { useUI } from '../stores/ui'
+
+import Grid from './Grid.jsx'
 
 import 'leaflet/dist/leaflet.css'
 
 const Map = ({ mapRef, pane }) => {
   const config = useConfig()
+  const showGrid = useUI((s) => s.showGrid)
 
   const [groupIndex, mapIndex] = pane.map
   const map = config.groups?.[groupIndex].maps?.[mapIndex]
@@ -29,6 +33,7 @@ const Map = ({ mapRef, pane }) => {
         minZoom={map.options.minZoom}
         maxZoom={map.options.maxZoom}
       />
+      {showGrid && <Grid />}
     </MapContainer>
   )
 }

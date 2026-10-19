@@ -1,7 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
+
+import { useUI } from '../stores/ui'
 
 const Nav = ({ onZoom, onGeolocate }) => {
+  const showGrid = useUI((s) => s.showGrid)
+  const toggleGrid = useUI((s) => s.toggleGrid)
+
   return (
     <nav className="position-absolute top-0 w-100 d-flex">
       <div className="search-group input-group mt-3 ms-3 me-auto">
@@ -22,6 +28,9 @@ const Nav = ({ onZoom, onGeolocate }) => {
         </button>
         <button className="btn btn-outline-secondary" onClick={onGeolocate}>
           <i className="bi bi-geo-alt"></i>
+        </button>
+        <button className={classNames('btn btn-outline-secondary', { active: showGrid })} onClick={toggleGrid}>
+          <i className="bi bi-grid-3x3"></i>
         </button>
       </div>
     </nav>

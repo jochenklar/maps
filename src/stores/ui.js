@@ -1,11 +1,29 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 export const useUI = create(
-  immer((set) => ({
-    showMapModal: false,
-    currentPane: null,
-    openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
-    closeMapModal: () => set({ showMapModal: false, currentPane: null }),
-  })),
+  persist(
+    immer((set) => ({
+      showMapModal: false,
+      currentPane: null,
+      showGrid: false,
+      openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
+      closeMapModal: () => set({ showMapModal: false, currentPane: null }),
+      toggleGrid: () => set((state) => ({ showGrid: !state.showGrid })),
+    })),
+    {
+      name: 'ui', // localStorage key
+      version: 1, // bump to drop persisted state which is no longer compatible
+      migrate: () => ({}), // drop the persisted state if the version changed
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          // drop the persisted state if it could not be parsed
+          console.warn('persisted state "ui" could not be loaded and was reset', error)
+          localStorage.removeItem('ui')
+        }
+      },
+      partialize: (state) => ({ showGrid: state.showGrid }),
+    },
+  ),
 )

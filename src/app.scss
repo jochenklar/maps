@@ -18,6 +18,16 @@ nav {
     gap: 1px;
 }
 
+.leaflet-grid-pane {
+    z-index: 450;
+    pointer-events: none;
+
+    .grid-line {
+        stroke: white;
+        stroke-width: 1px;
+    }
+}
+
 .map-card {
     cursor: pointer;
 
