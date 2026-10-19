@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 import { useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
-import { geolocateMaps, setMapRef, zoomMaps } from '../utils/maps'
+import { useUI } from '../stores/ui'
+import { geolocateMaps, setMapRef, setMapsView, zoomMaps } from '../utils/maps'
 import { syncUrl } from '../utils/url'
 
 import MapModal  from './MapModal.jsx'
@@ -25,11 +26,22 @@ const App = ({ config }) => {
     return syncUrl(mapsRef)
   }, [init, config])
 
+  // reset the panes and the ui to their initial state and move the maps to the view from the config,
+  // the persisted state and the url hash are updated by the stores
+  const handleReset = () => {
+    if (!window.confirm('Reset everything?')) return
+
+    usePanes.setState(usePanes.getInitialState())
+    useUI.setState(useUI.getInitialState())
+    setMapsView(mapsRef, config.view.center, config.view.zoom)
+  }
+
   return groups && (
     <main>
       <Nav
         onZoom={(delta) => zoomMaps(mapsRef, delta)}
         onGeolocate={() => geolocateMaps(mapsRef, maxZoom)}
+        onReset={handleReset}
       />
       <div className="d-flex vh-100">
         <PaneContainer

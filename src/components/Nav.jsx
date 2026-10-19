@@ -4,7 +4,7 @@ import classNames from 'classnames'
 
 import { useUI } from '../stores/ui'
 
-const Nav = ({ onZoom, onGeolocate }) => {
+const Nav = ({ onZoom, onGeolocate, onReset }) => {
   const showGrid = useUI((s) => s.showGrid)
   const toggleGrid = useUI((s) => s.toggleGrid)
   const showCrosshair = useUI((s) => s.showCrosshair)
@@ -40,6 +40,9 @@ const Nav = ({ onZoom, onGeolocate }) => {
         >
           <i className="bi bi-crosshair"></i>
         </button>
+        <button className="btn btn-outline-secondary" onClick={onReset}>
+          <i className="bi bi-arrow-counterclockwise"></i>
+        </button>
       </div>
     </nav>
   )
@@ -47,7 +50,8 @@ const Nav = ({ onZoom, onGeolocate }) => {
 
 Nav.propTypes = {
   onZoom: PropTypes.func,
-  onGeolocate: PropTypes.func
+  onGeolocate: PropTypes.func,
+  onReset: PropTypes.func
 }
 
 export default Nav
