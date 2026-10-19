@@ -45,8 +45,9 @@ const maps = ({ config = 'maps.config.js' } = {}) => {
       },
       load(id) {
         if (id === resolvedVirtualId) {
+          // without a config file, only the default config is used, see src/config/default.js
           if (!existsSync(configPath)) {
-            this.error(`config file not found: ${configPath}`)
+            return 'export default {}'
           }
           return `export { default } from ${JSON.stringify(configPath)}`
         }
