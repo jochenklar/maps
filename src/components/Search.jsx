@@ -88,7 +88,10 @@ const Search = ({ onSelect }) => {
   }
 
   return (
-    <div className="search-group position-relative mt-3 ms-3 me-auto" onBlur={handleBlur} onKeyDown={handleKeyDown}>
+    <div
+      className="search-group position-relative mt-3 ms-3 me-3 me-md-auto"
+      onBlur={handleBlur} onKeyDown={handleKeyDown}
+    >
       <form className="input-group shadow rounded-pill" onSubmit={handleSubmit}>
         <input
           ref={inputRef} type="text" className="form-control rounded-start-pill ps-3" placeholder="Search"

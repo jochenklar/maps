@@ -13,10 +13,10 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const toggleCrosshair = useUI((s) => s.toggleCrosshair)
 
   return (
-    <nav className="position-absolute top-0 w-100 d-flex">
+    <nav className="position-absolute top-0 w-100 d-flex flex-column flex-md-row">
       <Search onSelect={onSearch} />
 
-      <div className="d-flex align-items-start gap-2 mt-3 me-3">
+      <div className="d-flex flex-wrap align-items-start gap-2 mt-3 ms-3 ms-md-0 me-3">
         <div className="btn-group shadow rounded-3">
           <button className="btn btn-control" onClick={() => onZoom(1)} title="Zoom in">
             <i className="bi bi-plus-lg"></i>
@@ -30,7 +30,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
             <i className="bi bi-geo-alt"></i>
           </button>
         </div>
-        <div className="btn-group shadow rounded-3">
+        <div className="btn-group shadow rounded-3 ms-auto ms-md-2">
           <button className={classNames('btn btn-control', { active: showGrid })} onClick={toggleGrid} title="Grid">
             <i className="bi bi-grid-3x3"></i>
           </button>

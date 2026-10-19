@@ -18,8 +18,11 @@ nav {
     --bs-btn-active-border-color: var(--bs-border-color-translucent);
 }
 
+// full width above the nav buttons on small screens, next to them on larger ones
 .search-group {
-    width: 40%;
+    @media (min-width: 768px) {
+        width: 40%;
+    }
 }
 
 .search-results {
@@ -27,6 +30,8 @@ nav {
     --bs-list-group-active-color: var(--bs-primary-text-emphasis);
     --bs-list-group-active-border-color: var(--bs-border-color);
 
+    // above the nav buttons, which come later in the dom and get a z-index of 1 on hover or focus
+    z-index: 10;
     max-height: 60vh;
     overflow-y: auto;
 
