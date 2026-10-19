@@ -89,19 +89,22 @@ const Search = ({ onSelect }) => {
 
   return (
     <div className="search-group position-relative mt-3 ms-3 me-auto" onBlur={handleBlur} onKeyDown={handleKeyDown}>
-      <form className="input-group" onSubmit={handleSubmit}>
+      <form className="input-group shadow rounded-pill" onSubmit={handleSubmit}>
         <input
-          ref={inputRef} type="text" className="form-control border border-secondary" placeholder="Search"
+          ref={inputRef} type="text" className="form-control rounded-start-pill ps-3" placeholder="Search"
           aria-label="Search" value={query} onChange={(event) => setQuery(event.target.value)}
         />
         {
           query && (
-            <button className="btn btn-outline-secondary" type="button" onClick={handleClear} aria-label="Clear">
+            <button className="btn btn-control" type="button" onClick={handleClear} title="Clear" aria-label="Clear">
               <i className="bi bi-x-lg"></i>
             </button>
           )
         }
-        <button className="btn btn-outline-secondary" type="submit" disabled={loading} aria-label="Search">
+        <button
+          className="btn btn-control rounded-end-pill" type="submit" disabled={loading}
+          title="Search" aria-label="Search"
+        >
           {
             loading ? (
               <span className="spinner-border spinner-border-sm" role="status" aria-label="Searching" />
@@ -114,7 +117,10 @@ const Search = ({ onSelect }) => {
 
       {
         (places || error) && (
-          <div ref={listRef} className="search-results list-group position-absolute w-100 mt-1 shadow-sm">
+          <div
+            ref={listRef}
+            className="search-results list-group position-absolute w-100 mt-1 shadow rounded-3"
+          >
             {error && <div className="list-group-item text-danger">{error}</div>}
             {places?.length === 0 && <div className="list-group-item text-secondary">No places found.</div>}
             {
