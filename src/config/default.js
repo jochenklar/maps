@@ -24,7 +24,6 @@ export default {
       name: 'Maps',
       maps: [
         {
-          id: 'osm',
           name: 'OpenStreetMap',
           url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           options: {

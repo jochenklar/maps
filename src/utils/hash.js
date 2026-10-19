@@ -1,6 +1,7 @@
-// the url hash stores the view and the pane layout, e.g. #panes=v(osm,h(dop20,kdr1893))&map=14/52.51000/13.37628
+// the url hash stores the view and the pane layout, e.g.
+// #panes=v(tile.openstreetmap.org,berlin/geoportal/luftbilder/2026-dop20rgb)&map=14/52.51000/13.37628
 //
-// panes=id               a single pane, showing the map with this id
+// panes=id               a single pane, showing the map with this id, see getMapId in stores/config.js
 // panes=v(a,b), h(a,b)   a pane split vertically (side by side) or horizontally (on top of each other)
 // map=zoom/lat/lng       like on openstreetmap.org
 
@@ -9,8 +10,8 @@ const directions = {
   horizontal: 'h',
 }
 
-// map ids are used without encoding, so they are restricted to letters, numbers, '_', '-' and '.'
-const isValidMapId = (id) => /^[\w.-]+$/.test(id)
+// map ids are used without encoding, so they are restricted to letters, numbers, '_', '-', '.', '~' and '/'
+const isValidMapId = (id) => /^[\w.~/-]+$/.test(id)
 
 // the precision of the coordinates depending on the zoom, like in leaflet-hash
 const getPrecision = (zoom) => Math.max(0, Math.ceil(Math.log(zoom) / Math.LN2))
@@ -68,7 +69,7 @@ const parsePanes = (string, maxLevel) => {
       return { direction, children: [first, second] }
     }
 
-    const match = string.slice(position).match(/^[\w.-]+/)
+    const match = string.slice(position).match(/^[\w.~/-]+/)
     if (!match) {
       throw new Error(`invalid panes "${string}", expected a map id at position ${position}`)
     }
