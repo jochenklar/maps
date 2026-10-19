@@ -1,7 +1,6 @@
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-
-import config from './data/config.json'
+import config from 'virtual:maps-config'
 
 import App from './components/App.jsx'
 

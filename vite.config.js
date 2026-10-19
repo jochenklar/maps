@@ -1,18 +1,10 @@
 import { defineConfig } from 'vite'
 
-import react from '@vitejs/plugin-react'
+import maps from './src/plugins/vite-plugin-maps.js'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [maps()],
   server: {
     port: 8080
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        quietDeps: true,
-        silenceDeprecations: ['import', 'legacy-js-api', 'global-builtin', 'color-functions'],
-      },
-    },
   },
 })
