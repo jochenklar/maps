@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { MapContainer, TileLayer } from 'react-leaflet'
 
-import { useConfig } from '../stores/config'
+import { findMap, useConfig } from '../stores/config'
 import { useUI } from '../stores/ui'
 
 import Grid from './Grid.jsx'
@@ -13,8 +13,7 @@ const Map = ({ mapRef, pane }) => {
   const config = useConfig()
   const showGrid = useUI((s) => s.showGrid)
 
-  const [groupIndex, mapIndex] = pane.map
-  const map = config.groups?.[groupIndex].maps?.[mapIndex]
+  const map = findMap(config.groups, pane.map)
 
   return map && (
     <MapContainer

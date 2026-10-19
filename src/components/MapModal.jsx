@@ -43,8 +43,8 @@ const MapModal = () => {
     return `url("${thumbnailUrl}")`
   }
 
-  const handleClick = (groupIndex, mapIndex) => {
-    changeMap(currentPane, groupIndex, mapIndex)
+  const handleClick = (map) => {
+    changeMap(currentPane, map.id)
     closeMapModal()
   }
 
@@ -68,7 +68,7 @@ const MapModal = () => {
                           <div key={mapIndex} className="col-md-3">
                             <div
                               className="map-card card h-100"
-                              onClick={() => handleClick(groupIndex, mapIndex)}
+                              onClick={() => handleClick(map)}
                             >
                               <div className="card-img-top" style={{backgroundImage: backgroundImage(map)}} />
                               <div className="card-body px-2 py-1">

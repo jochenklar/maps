@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-const createPane = (id, parentId = null, level = 0, map = [0, 0]) => {
+// map is the id of the map from the config, null shows the first map
+const createPane = (id, parentId = null, level = 0, map = null) => {
   return {
     id,
     parentId,
@@ -19,6 +20,26 @@ export const usePanes = create(
       panes: {
         root: createPane('root')
       },
+
+      // replace all panes with a tree like { direction: 'vertical', children: [{ map: 'osm' }, { map: 'dop20' }] }
+      setPanes: (tree) =>
+        set((state) => {
+          const panes = {}
+          const addPane = (node, id, parentId, level) => {
+            panes[id] = createPane(id, parentId, level, node.map ?? null)
+            if (node.children) {
+              panes[id].direction = node.direction
+              panes[id].children = node.children.map((child) => {
+                const childId = crypto.randomUUID()
+                addPane(child, childId, id, level + 1)
+                return childId
+              })
+            }
+          }
+          addPane(tree, 'root', null, 0)
+          state.panes = panes
+        }),
+
       splitPane: (pane, direction) =>
         set((state) => {
           const id1 = crypto.randomUUID()
@@ -46,9 +67,9 @@ export const usePanes = create(
           parent.children = []
         }),
 
-      changeMap: (pane, groupIndex, mapIndex) =>
+      changeMap: (pane, mapId) =>
         set((state) => {
-          state.panes[pane.id].map = [groupIndex, mapIndex]
+          state.panes[pane.id].map = mapId
         }),
     })),
     {
