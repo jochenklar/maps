@@ -8,7 +8,7 @@ import globals from 'globals'
 import js from '@eslint/js'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'maps.config.js']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
