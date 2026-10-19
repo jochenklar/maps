@@ -49,9 +49,16 @@ nav {
 }
 
 // keep the attribution clear of the pane buttons in the lower left corner (at most 4 buttons and the margins),
-// in narrow panes it wraps into more lines instead
+// in narrow panes it is cut off with an ellipsis instead of wrapping into more lines
 .leaflet-bottom.leaflet-right {
     max-width: calc(100% - 200px);
+
+    .leaflet-control-attribution {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
 
 .leaflet-grid-pane {
