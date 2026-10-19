@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { latLng } from 'leaflet'
 import { isUndefined } from 'lodash'
 
 import { useConfig } from '../stores/config'
@@ -12,6 +13,7 @@ import PaneContainer from './PaneContainer.jsx'
 const App = ({ config }) => {
   const init = useConfig((s) => s.init)
   const groups = useConfig((s) => s.groups)
+  const geolocate = useConfig((s) => s.geolocate)
   const setView = useConfig((s) => s.setView)
 
   useEffect(() => init(config), [init, config])
@@ -79,8 +81,14 @@ const App = ({ config }) => {
 
   const handleGeolocate = () => {
     navigator.geolocation.getCurrentPosition((position) => {
+      const source = Object.values(mapRefs.current)[0]
+      if (!source) return
+
+      // zoom so that the accuracy circle (radius in meters) fits into the map,
+      // but not further than geolocate.maxZoom from the config
       const center = [position.coords.latitude, position.coords.longitude]
-      const zoom = 12
+      const bounds = latLng(center).toBounds(position.coords.accuracy * 2)
+      const zoom = Math.min(source.getBoundsZoom(bounds), geolocate?.maxZoom ?? Infinity)
 
       isSyncing.current = true
       Object.values(mapRefs.current).forEach((map) => {
