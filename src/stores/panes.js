@@ -52,7 +52,16 @@ export const usePanes = create(
         }),
     })),
     {
-      name: 'panes' // localStorage key
+      name: 'panes', // localStorage key
+      version: 1, // bump to drop persisted state which is no longer compatible
+      migrate: () => ({}), // drop the persisted state if the version changed
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          // drop the persisted state if it could not be parsed
+          console.warn('persisted state "panes" could not be loaded and was reset', error)
+          localStorage.removeItem('panes')
+        }
+      },
     }
   )
 )
