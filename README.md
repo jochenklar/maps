@@ -47,10 +47,10 @@ Add a `maps.config.js` with the maps to show, see [Configuration](#configuration
 ```js
 export default {
   brand: {
-    text: 'Munich Maps',
+    text: 'Berlin Maps',
   },
   view: {
-    center: [48.137, 11.575],
+    center: [52.51, 13.37628],
     zoom: 12,
   },
   groups: [
