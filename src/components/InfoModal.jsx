@@ -1,0 +1,33 @@
+import React from 'react'
+
+import useModal from '../hooks/useModal'
+import { useConfig } from '../stores/config'
+import { useUI } from '../stores/ui'
+
+const InfoModal = () => {
+  const brand = useConfig((s) => s.brand)
+  const info = useConfig((s) => s.info)
+
+  const showInfoModal = useUI((s) => s.showInfoModal)
+  const closeInfoModal = useUI((s) => s.closeInfoModal)
+
+  const ref = useModal(showInfoModal, closeInfoModal)
+
+  return (
+    <div className="modal" ref={ref} tabIndex="-1">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">
+              {brand.text}
+            </h5>
+            <button type="button" className="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div className="modal-body" dangerouslySetInnerHTML={{ __html: info }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default InfoModal

@@ -1,14 +1,11 @@
-import React, { useEffect, useRef } from 'react'
-import { Modal } from 'bootstrap'
+import React from 'react'
 
+import useModal from '../hooks/useModal'
 import { useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
 
 const MapModal = () => {
-  const ref = useRef(null)
-  const instance = useRef(null)
-
   const thumbnail = useConfig((s) => s.thumbnail)
   const groups = useConfig((s) => s.groups)
 
@@ -18,25 +15,7 @@ const MapModal = () => {
 
   const changeMap = usePanes((s) => s.changeMap)
 
-  useEffect(() => {
-    instance.current = new Modal(ref.current)
-    const el = ref.current
-    const handleHidden = () => useUI.getState().closeMapModal()
-    el.addEventListener('hidden.bs.modal', handleHidden)
-    return () => {
-      el.removeEventListener('hidden.bs.modal', handleHidden)
-      instance.current.dispose()
-    }
-  }, [])
-
-  // drive visibility from the store
-  useEffect(() => {
-    if (showMapModal) {
-      instance.current?.show()
-    } else {
-      instance.current?.hide()
-    }
-  }, [showMapModal])
+  const ref = useModal(showMapModal, closeMapModal)
 
   const backgroundImage = (map) => {
     const thumbnailUrl = map.url.replace('{z}/{x}/{y}', thumbnail)

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import { useConfig } from '../stores/config'
 import { useUI } from '../stores/ui'
 
 import Search from './Search.jsx'
@@ -11,6 +12,8 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const toggleGrid = useUI((s) => s.toggleGrid)
   const showCrosshair = useUI((s) => s.showCrosshair)
   const toggleCrosshair = useUI((s) => s.toggleCrosshair)
+  const openInfoModal = useUI((s) => s.openInfoModal)
+  const info = useConfig((s) => s.info)
 
   return (
     <nav className="position-absolute top-0 w-100 d-flex flex-column flex-md-row">
@@ -46,6 +49,15 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
             <i className="bi bi-arrow-counterclockwise"></i>
           </button>
         </div>
+        {
+          info && (
+            <div className="btn-group shadow rounded-3">
+              <button className="btn btn-control" onClick={openInfoModal} title="Info">
+                <i className="bi bi-info-circle"></i>
+              </button>
+            </div>
+          )
+        }
       </div>
     </nav>
   )

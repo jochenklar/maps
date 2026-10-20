@@ -6,12 +6,15 @@ export const useUI = create(
   persist(
     immer((set) => ({
       showMapModal: false,
+      showInfoModal: true,
       currentPane: null,
       showGrid: false,
       showCrosshair: false,
       view: null, // the current center and zoom of the maps, null shows the view from the config
       openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
       closeMapModal: () => set({ showMapModal: false, currentPane: null }),
+      openInfoModal: () => set({ showInfoModal: true }),
+      closeInfoModal: () => set({ showInfoModal: false }),
       toggleGrid: () => set((state) => ({ showGrid: !state.showGrid })),
       toggleCrosshair: () => set((state) => ({ showCrosshair: !state.showCrosshair })),
       setView: (view) => set((state) => ({ view: { ...state.view, ...view } })),
@@ -27,7 +30,12 @@ export const useUI = create(
           localStorage.removeItem('ui')
         }
       },
-      partialize: (state) => ({ showGrid: state.showGrid, showCrosshair: state.showCrosshair, view: state.view }),
+      partialize: (state) => ({
+        showInfoModal: state.showInfoModal,
+        showGrid: state.showGrid,
+        showCrosshair: state.showCrosshair,
+        view: state.view,
+      }),
     },
   ),
 )

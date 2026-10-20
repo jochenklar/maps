@@ -8,6 +8,7 @@ import { fitMapsToBounds, geolocateMaps, setMapRef, setMapsView, zoomMaps } from
 import { getPlaceBounds } from '../utils/search'
 import { syncUrl } from '../utils/url'
 
+import InfoModal from './InfoModal.jsx'
 import MapModal  from './MapModal.jsx'
 import Nav from './Nav.jsx'
 import PaneContainer from './PaneContainer.jsx'
@@ -17,6 +18,7 @@ const App = ({ config }) => {
   const groups = useConfig((s) => s.groups)
   const geolocateMaxZoom = useConfig((s) => s.geolocate?.maxZoom)
   const searchMaxZoom = useConfig((s) => s.search?.maxZoom)
+  const info = useConfig((s) => s.info)
   const brandText = useConfig((s) => s.brand?.text)
 
   const panes = usePanes((state) => state.panes)
@@ -62,6 +64,7 @@ const App = ({ config }) => {
         />
       </div>
       <MapModal />
+      {info && <InfoModal />}
     </main>
   )
 }
