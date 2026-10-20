@@ -5,7 +5,7 @@ from a configured list, and all panes move and zoom together. It includes a plac
 [Nominatim](https://nominatim.org)), geolocation, a coordinate grid and a center marker. The view and the
 layout of the panes are stored in the url, so that they can be shared.
 
-The app is a [Vite](https://vite.dev) plugin: a project only contains a `maps.config.js` with the maps to show,
+The app is a [Vite](https://vite.dev) plugin: a project only contains a `vite.config.js` with the maps to show,
 and the plugin provides the app and builds it into a static site.
 
 
@@ -31,56 +31,65 @@ Install this package from GitHub and Vite (Node.js 24 is used for development, s
 npm install github:jochenklar/maps vite
 ```
 
-Add a `vite.config.js`, which only uses the plugin:
+Add a `maps.json` with the maps to show, see [Configuration](#configuration):
 
-```js
-import { defineConfig } from 'vite'
-import maps from '@jochenklar/maps/vite'
-
-export default defineConfig({
-  plugins: [maps()],
-})
-```
-
-Add a `maps.config.js` with the maps to show, see [Configuration](#configuration):
-
-```js
-export default {
-  brand: {
-    text: 'Berlin Maps',
+```json
+{
+  "brand": {
+    "text": "Berlin Maps"
   },
-  view: {
-    center: [52.51, 13.37628],
-    zoom: 12,
+  "view": {
+    "center": [52.51, 13.37628],
+    "zoom": 12
   },
-  groups: [
+  "groups": [
     {
-      name: 'Maps',
-      maps: [
+      "name": "Maps",
+      "maps": [
         {
-          name: 'OpenStreetMap',
-          url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          options: {
-            attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-            maxZoom: 19,
-          },
+          "name": "OpenStreetMap",
+          "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          "options": {
+            "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap contributors</a>",
+            "maxZoom": 19
+          }
         },
         {
-          name: 'OpenTopoMap',
-          url: 'https://tile.opentopomap.org/{z}/{x}/{y}.png',
-          options: {
-            attribution: '<a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
-            maxZoom: 17,
-          },
-        },
-      ],
-    },
-  ],
+          "name": "OpenTopoMap",
+          "url": "https://tile.opentopomap.org/{z}/{x}/{y}.png",
+          "options": {
+            "attribution": "<a href=\"https://opentopomap.org\">OpenTopoMap</a> (CC-BY-SA)",
+            "maxZoom": 17
+          }
+        }
+      ]
+    }
+  ]
 }
 ```
 
+Add a `vite.config.js`, which reads `maps.json` and passes it to the plugin:
+
+```js
+import { readFileSync } from 'node:fs'
+import { defineConfig } from 'vite'
+import maps from '@jochenklar/maps/vite'
+
+const config = JSON.parse(readFileSync('maps.json', 'utf-8'))
+
+export default defineConfig({
+  plugins: [maps(config)],
+})
+```
+
+The config can also be written directly into `vite.config.js`, but a separate `maps.json` keeps the list of maps,
+which tends to get long, apart from the code. Longer HTML for `info` is easier to keep in its own file, which can be
+added in `vite.config.js`, e.g. `maps({ ...config, info: readFileSync('info.html', 'utf-8') })`. The development
+server needs to be restarted after `maps.json` or such a file changed.
+
 Optionally, add a `public/` directory for static files. Its content is copied into the build, and a
-`public/icon.svg` is used as the favicon.
+`public/icon.svg` is used as the favicon. A `maps.css` is loaded after the styles of the app, e.g. to set
+the colors with the [CSS variables of Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
 A `.gitignore` should contain at least:
 
@@ -93,7 +102,8 @@ The project then looks like this:
 
 ```
 my-maps/
-├── maps.config.js
+├── maps.css
+├── maps.json
 ├── package.json
 ├── package-lock.json
 ├── public/
@@ -107,13 +117,15 @@ be served by any web server, and `npm run preview` serves the build locally.
 
 ## Configuration
 
-`maps.config.js` is merged into the [default config](src/config/default.js), so only the values which differ
-from the defaults need to be set. Objects are merged, all other values, including arrays like `groups`, are
-replaced. Without a `maps.config.js`, only the default config is used.
+The config passed to the plugin is merged into the [default config](src/config/default.js), so only the values
+which differ from the defaults need to be set. Objects are merged, all other values, including arrays like `groups`,
+are replaced. Without a config, only the default config is used.
 
 | Key | Default | Description |
 | --- | --- | --- |
 | `brand.text` | `'Maps'` | The title of the page and of the info, or titles by language like `{ de, en }`. |
+| `brand.href` | | The public url of the site, used for link previews. |
+| `brand.image` | | The image of link previews, a url or a path relative to `brand.href`, e.g. `share.png` for a `public/share.png`. |
 | `info` | | HTML which is shown in the info, which opens on the first visit and with the info button, or HTML by language like `{ de, en }`. Without `info`, there is no info button. |
 | `view.center` | `[52.51, 13.37628]` | The initial center as `[lat, lng]`. |
 | `view.zoom` | `10` | The initial zoom level. |
@@ -131,6 +143,10 @@ for subdomains), and `options` with the `attribution`, `minZoom` and `maxZoom` o
 Maps are identified in the url by the path of their tile url before the placeholders, or the hostname if there is
 no path, e.g. `tile.openstreetmap.org` or `berlin/geoportal/luftbilder/2026-dop20rgb`. These ids should be unique
 and only contain letters, numbers, `_`, `-`, `.`, `~` and `/`, otherwise a warning is shown in the console.
+
+For link previews in messengers and social media, the build writes a `<title>` and [Open Graph](https://ogp.me)
+tags into `index.html`: the brand text (in English or the first language), `brand.href` as url and `brand.image`
+as image.
 
 The public Nominatim instance may only be used lightly, see its
 [usage policy](https://operations.osmfoundation.org/policies/nominatim/). For sites with more traffic, set
@@ -165,8 +181,9 @@ cd maps
 npm install
 ```
 
-The repository uses the plugin itself, so `npm run dev` starts the app with a `maps.config.js` in the root of
-the repository, which is ignored by git, or with the default config if there is none. Other commands:
+The repository uses the plugin itself, so `npm run dev` starts the app with the config from a `maps.json` and the
+styles from a `maps.css` in the root of the repository, which are ignored by git, or with the default config if
+there is none. Other commands:
 
 ```bash
 npm run build    # build into dist/

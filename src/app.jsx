@@ -6,6 +6,7 @@ import App from './components/App.jsx'
 
 import './bootstrap.scss'
 import './app.scss'
+import 'virtual:maps-css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

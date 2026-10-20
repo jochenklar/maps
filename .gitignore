@@ -10,7 +10,7 @@ __pycache__/
 node_modules/
 dist/
 
-maps.config.js
 info.*.html
-public/
 maps.css
+maps.json
+public/
