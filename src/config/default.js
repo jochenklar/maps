@@ -1,3 +1,5 @@
+import i18n from './i18n'
+
 // the default config, maps.config.js is merged into it: objects are merged, all other values,
 // including arrays like groups, are replaced
 export default {
@@ -22,6 +24,8 @@ export default {
     maxLevel: 3,
   },
   thumbnail: '13/4400/2686',
+  // the texts of the interface by language, the language is taken from the browser, see src/config/i18n.js
+  i18n,
   groups: [
     {
       name: 'Maps',

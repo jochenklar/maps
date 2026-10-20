@@ -122,6 +122,7 @@ replaced. Without a `maps.config.js`, only the default config is used.
 | `search.maxZoom` | `18` | The maximal zoom level when moving to a search result. |
 | `panes.maxLevel` | `3` | How often panes can be split inside each other. |
 | `thumbnail` | `'13/4400/2686'` | The tile (`zoom/x/y`) which is shown for each map in the map selection. |
+| `i18n` | English and German | The texts of the interface by language, see [src/config/i18n.js](src/config/i18n.js), e.g. `{ de: { search: 'Ortssuche' } }` to change a single string or `{ fr: { … } }` to add a language. The first language of the browser which has texts is used, otherwise English. Missing strings fall back to English, `searchAttribution` is HTML. |
 | `groups` | OpenStreetMap | The maps, in groups like `[{ name, maps }]`, see below. |
 
 Each map in `groups` has a `name`, a tile `url` with `{z}`, `{x}` and `{y}` placeholders (and optionally `{s}`

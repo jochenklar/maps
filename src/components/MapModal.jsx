@@ -8,6 +8,7 @@ import { useUI } from '../stores/ui'
 const MapModal = () => {
   const thumbnail = useConfig((s) => s.thumbnail)
   const groups = useConfig((s) => s.groups)
+  const strings = useConfig((s) => s.strings)
 
   const showMapModal = useUI((s) => s.showMapModal)
   const closeMapModal = useUI((s) => s.closeMapModal)
@@ -32,8 +33,8 @@ const MapModal = () => {
       <div className="modal-dialog modal-xl">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Maps</h5>
-            <button type="button" className="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 className="modal-title">{strings.maps}</h5>
+            <button type="button" className="btn btn-close" data-bs-dismiss="modal" aria-label={strings.close}></button>
           </div>
           <div className="modal-body px-1">
             <div className="d-flex flex-column gap-4">

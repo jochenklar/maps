@@ -20,6 +20,8 @@ const App = ({ config }) => {
   const searchMaxZoom = useConfig((s) => s.search?.maxZoom)
   const info = useConfig((s) => s.info)
   const brandText = useConfig((s) => s.brand?.text)
+  const lang = useConfig((s) => s.lang)
+  const strings = useConfig((s) => s.strings)
 
   const panes = usePanes((state) => state.panes)
 
@@ -35,10 +37,14 @@ const App = ({ config }) => {
     if (brandText) document.title = brandText
   }, [brandText])
 
+  useEffect(() => {
+    if (lang) document.documentElement.lang = lang
+  }, [lang])
+
   // reset the panes and the ui to their initial state and move the maps to the view from the config,
   // the persisted state and the url hash are updated by the stores
   const handleReset = () => {
-    if (!window.confirm('Reset everything?')) return
+    if (!window.confirm(strings.resetConfirm)) return
 
     usePanes.setState(usePanes.getInitialState())
     useUI.setState(useUI.getInitialState())

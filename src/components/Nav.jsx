@@ -14,6 +14,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const toggleCrosshair = useUI((s) => s.toggleCrosshair)
   const openInfoModal = useUI((s) => s.openInfoModal)
   const info = useConfig((s) => s.info)
+  const strings = useConfig((s) => s.strings)
 
   return (
     <nav className="position-absolute top-0 w-100 d-flex flex-column flex-md-row">
@@ -21,38 +22,41 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
 
       <div className="d-flex flex-wrap align-items-start gap-2 mt-3 ms-3 ms-md-0 me-3">
         <div className="btn-group shadow rounded-3">
-          <button className="btn btn-control" onClick={() => onZoom(1)} title="Zoom in">
+          <button className="btn btn-control" onClick={() => onZoom(1)} title={strings.zoomIn}>
             <i className="bi bi-plus-lg"></i>
           </button>
-          <button className="btn btn-control" onClick={() => onZoom(-1)} title="Zoom out">
+          <button className="btn btn-control" onClick={() => onZoom(-1)} title={strings.zoomOut}>
             <i className="bi bi-dash-lg"></i>
           </button>
         </div>
         <div className="btn-group shadow rounded-3">
-          <button className="btn btn-control" onClick={onGeolocate} title="My location">
+          <button className="btn btn-control" onClick={onGeolocate} title={strings.geolocate}>
             <i className="bi bi-geo-alt"></i>
           </button>
         </div>
         <div className="btn-group shadow rounded-3 ms-auto ms-md-2">
-          <button className={classNames('btn btn-control', { active: showGrid })} onClick={toggleGrid} title="Grid">
+          <button
+            className={classNames('btn btn-control', { active: showGrid })}
+            onClick={toggleGrid} title={strings.grid}
+          >
             <i className="bi bi-grid-3x3"></i>
           </button>
           <button
             className={classNames('btn btn-control', { active: showCrosshair })}
-            onClick={toggleCrosshair} title="Center marker"
+            onClick={toggleCrosshair} title={strings.crosshair}
           >
             <i className="bi bi-crosshair"></i>
           </button>
         </div>
         <div className="btn-group shadow rounded-3">
-          <button className="btn btn-control" onClick={onReset} title="Reset">
+          <button className="btn btn-control" onClick={onReset} title={strings.reset}>
             <i className="bi bi-arrow-counterclockwise"></i>
           </button>
         </div>
         {
           info && (
             <div className="btn-group shadow rounded-3">
-              <button className="btn btn-control" onClick={openInfoModal} title="Info">
+              <button className="btn btn-control" onClick={openInfoModal} title={strings.info}>
                 <i className="bi bi-info-circle"></i>
               </button>
             </div>

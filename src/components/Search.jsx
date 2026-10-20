@@ -7,6 +7,7 @@ import { searchPlaces } from '../utils/search'
 
 const Search = ({ onSelect }) => {
   const url = useConfig((s) => s.search.url)
+  const strings = useConfig((s) => s.strings)
 
   const [query, setQuery] = useState('')
   const [places, setPlaces] = useState(null)
@@ -50,7 +51,7 @@ const Search = ({ onSelect }) => {
       }
     } catch (error) {
       console.warn(error.message)
-      setError('The search failed, please try again later.')
+      setError(strings.searchError)
     } finally {
       setLoading(false)
     }
@@ -94,23 +95,26 @@ const Search = ({ onSelect }) => {
     >
       <form className="input-group shadow rounded-pill" onSubmit={handleSubmit}>
         <input
-          ref={inputRef} type="text" className="form-control rounded-start-pill ps-3" placeholder="Search"
-          aria-label="Search" value={query} onChange={(event) => setQuery(event.target.value)}
+          ref={inputRef} type="text" className="form-control rounded-start-pill ps-3" placeholder={strings.search}
+          aria-label={strings.search} value={query} onChange={(event) => setQuery(event.target.value)}
         />
         {
           query && (
-            <button className="btn btn-control" type="button" onClick={handleClear} title="Clear" aria-label="Clear">
+            <button
+              className="btn btn-control" type="button" onClick={handleClear}
+              title={strings.clear} aria-label={strings.clear}
+            >
               <i className="bi bi-x-lg"></i>
             </button>
           )
         }
         <button
           className="btn btn-control rounded-end-pill" type="submit" disabled={loading}
-          title="Search" aria-label="Search"
+          title={strings.search} aria-label={strings.search}
         >
           {
             loading ? (
-              <span className="spinner-border spinner-border-sm" role="status" aria-label="Searching" />
+              <span className="spinner-border spinner-border-sm" role="status" aria-label={strings.searching} />
             ) : (
               <i className="bi bi-search"></i>
             )
@@ -125,7 +129,7 @@ const Search = ({ onSelect }) => {
             className="search-results list-group position-absolute w-100 mt-1 shadow rounded-3"
           >
             {error && <div className="list-group-item text-danger">{error}</div>}
-            {places?.length === 0 && <div className="list-group-item text-secondary">No places found.</div>}
+            {places?.length === 0 && <div className="list-group-item text-secondary">{strings.noPlaces}</div>}
             {
               places?.map((place, index) => (
                 <button
@@ -140,12 +144,10 @@ const Search = ({ onSelect }) => {
             }
             {
               places && (
-                <div className="list-group-item search-attribution text-secondary">
-                  Search by <a href="https://nominatim.org" target="_blank" rel="noreferrer">Nominatim</a>,
-                  data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
-                    OpenStreetMap contributors
-                  </a>
-                </div>
+                <div
+                  className="list-group-item search-attribution text-secondary"
+                  dangerouslySetInnerHTML={{ __html: strings.searchAttribution }}
+                />
               )
             }
           </div>

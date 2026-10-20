@@ -16,6 +16,12 @@ const mergeConfig = (config) => mergeWith({}, defaults, config, (_, value) => {
   if (isArray(value)) return value
 })
 
+// the first language of the browser which has strings, e.g. de for de-DE, or english if there is none
+const getBrowserLang = (i18n) => {
+  const langs = navigator.languages ?? [navigator.language]
+  return langs.map((lang) => lang.split('-')[0].toLowerCase()).find((lang) => i18n[lang]) ?? 'en'
+}
+
 // find a map from the config by its id, fall back to the first map if the id is unknown
 export const findMap = (groups, id) => {
   const maps = groups?.flatMap((group) => group.maps) ?? []
@@ -30,6 +36,10 @@ export const useConfig = create((set) => ({
       ...group,
       maps: group.maps.map((map) => ({ ...map, id: getMapId(map.url) })),
     }))
+
+    // the strings of the language of the browser, missing strings fall back to english
+    data.lang = getBrowserLang(data.i18n)
+    data.strings = { ...data.i18n.en, ...data.i18n[data.lang] }
 
     const ids = data.groups.flatMap((group) => group.maps).map((map) => map.id)
     ids.forEach((id, index) => {
