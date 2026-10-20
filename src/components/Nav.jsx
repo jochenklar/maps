@@ -34,7 +34,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
             <i className="bi bi-geo-alt"></i>
           </button>
         </div>
-        <div className="btn-group shadow rounded-3 ms-auto ms-md-2">
+        <div className="btn-group shadow rounded-3 ms-auto ms-md-0">
           <button
             className={classNames('btn btn-control', { active: showGrid })}
             onClick={toggleGrid} title={strings.grid}
