@@ -1,5 +1,6 @@
+// mobile safari shows the background of the body behind its status bar and toolbar
 body {
-    background-color: var(--bs-secondary);
+    background-color: white;
 }
 
 nav {
@@ -50,8 +51,18 @@ nav {
     }
 }
 
+// the height of the visible area, 100vh is taller than that on mobile safari, where it includes the area
+// behind the toolbars, so that the buttons at the bottom of the panes are hidden, 100vh is the fallback
+// for browsers without dvh
+.panes {
+    height: 100vh;
+    height: 100dvh;
+}
+
+// the gap shows the background as a line between split panes
 .pane-container {
     gap: 1px;
+    background-color: var(--bs-secondary);
 }
 
 // keep the attribution clear of the pane buttons in the lower left corner (at most 4 buttons and the margins),

@@ -62,7 +62,7 @@ const App = ({ config }) => {
         onGeolocate={() => geolocateMaps(mapsRef, geolocateMaxZoom)}
         onReset={handleReset}
       />
-      <div className="d-flex vh-100">
+      <div className="d-flex panes">
         <PaneContainer
           id="root"
           panes={panes}
