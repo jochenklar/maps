@@ -149,6 +149,8 @@ The url hash contains the layout of the panes and the view, e.g.
 - `panes=v(a,b)` is a pane split vertically (side by side), `panes=h(a,b)` one split horizontally (on top of each
   other), and `a` and `b` can be split again.
 - `map=zoom/lat/lng` is the view, like on openstreetmap.org.
+- `show=grid,crosshair,labels` lists the overlays which are shown: the coordinate grid, the center marker and the
+  names of the maps. It is left out if none are shown.
 
 Without a hash, the last layout and view are restored from the browser's local storage.
 

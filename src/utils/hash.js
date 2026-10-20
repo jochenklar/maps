@@ -4,10 +4,18 @@
 // panes=id               a single pane, showing the map with this id, see getMapId in stores/config.js
 // panes=v(a,b), h(a,b)   a pane split vertically (side by side) or horizontally (on top of each other)
 // map=zoom/lat/lng       like on openstreetmap.org
+// show=grid,labels       the overlays which are shown, missing if none
 
 const directions = {
   vertical: 'v',
   horizontal: 'h',
+}
+
+// the overlays by their name in the url and their flag in the ui store
+const overlays = {
+  grid: 'showGrid',
+  crosshair: 'showCrosshair',
+  labels: 'showLabels',
 }
 
 // map ids are used without encoding, so they are restricted to letters, numbers, '_', '-', '.', '~' and '/'
@@ -31,8 +39,11 @@ const formatPanes = (panes, getMapId, id = 'root') => {
   return `${directions[pane.direction]}(${children.join(',')})`
 }
 
-const formatHash = ({ view, panes, getMapId }) => {
-  return `#panes=${formatPanes(panes, getMapId)}&map=${formatView(view)}`
+const formatShow = (flags) => Object.keys(overlays).filter((name) => flags[overlays[name]]).join(',')
+
+const formatHash = ({ view, panes, flags, getMapId }) => {
+  const show = formatShow(flags)
+  return `#panes=${formatPanes(panes, getMapId)}&map=${formatView(view)}` + (show ? `&show=${show}` : '')
 }
 
 const parseView = (string) => {
@@ -41,6 +52,13 @@ const parseView = (string) => {
     throw new Error(`invalid view "${string}"`)
   }
   return { center: [lat, lng], zoom }
+}
+
+// returns the flags of all overlays, the ones which are not listed are false
+const parseShow = (string) => {
+  const names = string ? string.split(',') : []
+  names.filter((name) => !overlays[name]).forEach((name) => console.warn(`unknown overlay "${name}"`))
+  return Object.fromEntries(Object.entries(overlays).map(([name, flag]) => [flag, names.includes(name)]))
 }
 
 // parse the layout into a tree like { direction: 'vertical', children: [{ map: 'osm' }, { map: 'dop20' }] }
@@ -84,8 +102,9 @@ const parsePanes = (string, maxLevel) => {
   return tree
 }
 
-// returns { panes, view }, each of them is undefined if it is missing or invalid,
-// layouts with panes deeper than maxLevel are invalid
+// returns { panes, view, flags }, panes and view are undefined if they are missing or invalid,
+// layouts with panes deeper than maxLevel are invalid, flags is undefined if the hash is empty,
+// otherwise the overlays which are not in show are turned off, so that a link shows exactly its state
 const parseHash = (hash, { maxLevel }) => {
   const params = new URLSearchParams(hash.replace(/^#/, ''))
   const result = {}
@@ -104,6 +123,10 @@ const parseHash = (hash, { maxLevel }) => {
     } catch (error) {
       console.warn(error.message)
     }
+  }
+
+  if (params.has('panes') || params.has('map') || params.has('show')) {
+    result.flags = parseShow(params.get('show'))
   }
 
   return result

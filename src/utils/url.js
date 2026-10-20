@@ -7,22 +7,24 @@ import { useUI } from '../stores/ui'
 import { formatHash, parseHash } from './hash'
 import { setMapsView } from './maps'
 
-// apply the panes and the view from the url hash, this overrides the persisted state
+// apply the panes, the view and the overlays from the url hash, this overrides the persisted state
 const applyHash = (mapsRef) => {
   const { maxLevel } = useConfig.getState().panes
-  const { panes, view } = parseHash(window.location.hash, { maxLevel })
+  const { panes, view, flags } = parseHash(window.location.hash, { maxLevel })
   if (panes) usePanes.getState().setPanes(panes)
+  if (flags) useUI.setState(flags)
   if (view) setMapsView(mapsRef, view.center, view.zoom)
 }
 
-// write the panes and the view to the url hash, so that the url can be shared,
+// write the panes, the view and the overlays to the url hash, so that the url can be shared,
 // debounced since the view changes with every move and browsers limit replaceState
 const writeHash = debounce(() => {
   const { groups, view: configView } = useConfig.getState()
-  const view = useUI.getState().view ?? configView
+  const { view: uiView, ...flags } = useUI.getState()
+  const view = uiView ?? configView
   const { panes } = usePanes.getState()
   const getMapId = (id) => findMap(groups, id)?.id
-  window.history.replaceState(null, '', formatHash({ view, panes, getMapId }))
+  window.history.replaceState(null, '', formatHash({ view, panes, flags, getMapId }))
 }, 300)
 
 // keep the url hash and the stores in sync, returns a function to stop syncing
