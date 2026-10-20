@@ -16,6 +16,12 @@ nav {
     --bs-btn-active-bg: var(--bs-primary-bg-subtle);
     --bs-btn-active-color: var(--bs-primary-text-emphasis);
     --bs-btn-active-border-color: var(--bs-border-color-translucent);
+
+    // keep the shape when disabled, e.g. the search button while it shows the spinner
+    --bs-btn-disabled-bg: white;
+    --bs-btn-disabled-color: var(--bs-body-color);
+    --bs-btn-disabled-border-color: var(--bs-border-color-translucent);
+    --bs-btn-disabled-opacity: 1;
 }
 
 // full width above the nav buttons on small screens, next to them on larger ones
