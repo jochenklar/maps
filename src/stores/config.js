@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { isArray, mergeWith } from 'lodash'
+import { isArray, isPlainObject, mergeWith } from 'lodash'
 
 import defaults from '../config/default'
 import { isValidMapId } from '../utils/hash'
@@ -40,6 +40,11 @@ export const useConfig = create((set) => ({
     // the strings of the language of the browser, missing strings fall back to english
     data.lang = getBrowserLang(data.i18n)
     data.strings = { ...data.i18n.en, ...data.i18n[data.lang] }
+
+    // the info is either html or html by language, which falls back to english or the first language
+    if (isPlainObject(data.info)) {
+      data.info = data.info[data.lang] ?? data.info.en ?? Object.values(data.info)[0]
+    }
 
     const ids = data.groups.flatMap((group) => group.maps).map((map) => map.id)
     ids.forEach((id, index) => {

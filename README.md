@@ -114,7 +114,7 @@ replaced. Without a `maps.config.js`, only the default config is used.
 | Key | Default | Description |
 | --- | --- | --- |
 | `brand.text` | `'Maps'` | The title of the page and of the info. |
-| `info` | | HTML which is shown in the info, which opens on the first visit and with the info button. Without `info`, there is no info button. |
+| `info` | | HTML which is shown in the info, which opens on the first visit and with the info button, or HTML by language like `{ de, en }`. Without `info`, there is no info button. |
 | `view.center` | `[52.51, 13.37628]` | The initial center as `[lat, lng]`. |
 | `view.zoom` | `10` | The initial zoom level. |
 | `geolocate.maxZoom` | `18` | The maximal zoom level when moving to the current location. |
