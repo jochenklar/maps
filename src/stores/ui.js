@@ -7,6 +7,7 @@ export const useUI = create(
     immer((set) => ({
       showMapModal: false,
       showInfoModal: true,
+      showResetModal: false,
       currentPane: null,
       showGrid: false,
       showCrosshair: false,
@@ -16,6 +17,8 @@ export const useUI = create(
       closeMapModal: () => set({ showMapModal: false, currentPane: null }),
       openInfoModal: () => set({ showInfoModal: true }),
       closeInfoModal: () => set({ showInfoModal: false }),
+      openResetModal: () => set({ showResetModal: true }),
+      closeResetModal: () => set({ showResetModal: false }),
       toggleGrid: () => set((state) => ({ showGrid: !state.showGrid })),
       toggleCrosshair: () => set((state) => ({ showCrosshair: !state.showCrosshair })),
       toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),

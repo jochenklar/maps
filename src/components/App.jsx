@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useConfig } from '../stores/config'
@@ -12,6 +12,7 @@ import InfoModal from './InfoModal.jsx'
 import MapModal  from './MapModal.jsx'
 import Nav from './Nav.jsx'
 import PaneContainer from './PaneContainer.jsx'
+import ResetModal from './ResetModal.jsx'
 
 const App = ({ config }) => {
   const init = useConfig((s) => s.init)
@@ -21,9 +22,9 @@ const App = ({ config }) => {
   const info = useConfig((s) => s.info)
   const brandText = useConfig((s) => s.brand?.text)
   const lang = useConfig((s) => s.lang)
-  const strings = useConfig((s) => s.strings)
 
   const panes = usePanes((state) => state.panes)
+  const openResetModal = useUI((s) => s.openResetModal)
 
   // the leaflet maps of all panes by pane id, and whether they are currently synced, see utils/maps.js
   const mapsRef = useRef({ maps: {}, isSyncing: false })
@@ -42,17 +43,15 @@ const App = ({ config }) => {
   }, [lang])
 
   // reset the panes and the ui to their initial state and move the maps to the view from the config,
-  // the persisted state and the url hash are updated by the stores
-  const handleReset = () => {
-    if (!window.confirm(strings.resetConfirm)) return
-
+  // the persisted state and the url hash are updated by the stores, it is confirmed in the ResetModal
+  const handleReset = useCallback(() => {
     usePanes.setState(usePanes.getInitialState())
     useUI.setState(useUI.getInitialState())
 
     // use the merged config, since the view might only be set in the defaults
     const { view } = useConfig.getState()
     setMapsView(mapsRef, view.center, view.zoom)
-  }
+  }, [])
 
   return groups && (
     <main>
@@ -60,7 +59,7 @@ const App = ({ config }) => {
         onZoom={(delta) => zoomMaps(mapsRef, delta)}
         onSearch={(place) => fitMapsToBounds(mapsRef, getPlaceBounds(place), searchMaxZoom)}
         onGeolocate={() => geolocateMaps(mapsRef, geolocateMaxZoom)}
-        onReset={handleReset}
+        onReset={openResetModal}
       />
       <div className="d-flex panes">
         <PaneContainer
@@ -70,6 +69,7 @@ const App = ({ config }) => {
         />
       </div>
       <MapModal />
+      <ResetModal onReset={handleReset} />
       {info && <InfoModal />}
     </main>
   )
