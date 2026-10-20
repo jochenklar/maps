@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { runnerImport } from 'vite'
 
 import react from '@vitejs/plugin-react'
 
@@ -28,10 +29,10 @@ const getMetaTags = ({ text, href, image } = {}) => {
   ].filter(Boolean)
 }
 
-// the config is merged into the default config in the app, see src/config/default.js
-const maps = (config = {}) => {
-  // the directory of the project using this package, which contains public/ and maps.css
+const maps = ({ config = 'maps.config.js' } = {}) => {
+  // the directory of the project using this package, which contains maps.config.js, maps.css and public/
   const cwd = process.cwd()
+  const configPath = path.resolve(cwd, config)
   const cssPath = path.resolve(cwd, 'maps.css')
 
   return [
@@ -59,13 +60,24 @@ const maps = (config = {}) => {
           },
         },
       }),
-      transformIndexHtml: () => getMetaTags(config.brand),
+      transformIndexHtml: async () => {
+        if (!existsSync(configPath)) return []
+
+        // load maps.config.js like the app does, so that it can import html with ?raw,
+        // but without vite.config.js, which uses this plugin
+        const { module } = await runnerImport(configPath, { configFile: false })
+        return getMetaTags(module.default.brand)
+      },
       resolveId: (id) => {
         if (virtualIds.includes(id)) return '\0' + id
       },
       load(id) {
         if (id === '\0virtual:maps-config') {
-          return `export default ${JSON.stringify(config)}`
+          // without a config file, only the default config is used, see src/config/default.js
+          if (!existsSync(configPath)) {
+            return 'export default {}'
+          }
+          return `export { default } from ${JSON.stringify(configPath)}`
         }
         if (id === '\0virtual:maps-css') {
           // the styles of the project are optional, they are loaded after the styles of the app

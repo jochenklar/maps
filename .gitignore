@@ -12,5 +12,5 @@ dist/
 
 info.*.html
 maps.css
-maps.json
+maps.config.js
 public/
