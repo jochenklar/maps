@@ -15,10 +15,10 @@ const PaneNav = ({ pane }) => {
   const strings = useConfig((s) => s.strings)
 
   return (
-    <nav className="position-absolute bottom-0 d-flex flex-column align-items-start mw-100">
+    <nav className="position-absolute bottom-0 start-0 d-flex flex-column align-items-start mw-100">
       {
         showLabels && (
-          <div className="pane-label bg-white shadow rounded-3 small px-2 py-1 mx-3 mb-2 text-truncate">
+          <div className="pane-label bg-white shadow rounded-3 small px-2 py-1 mx-3 mb-3 text-truncate">
             {findMap(groups, pane.map)?.name}
           </div>
         )

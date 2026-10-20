@@ -59,6 +59,13 @@ nav {
     height: 100dvh;
 }
 
+// the name of the map above the pane buttons, cut off with an ellipsis if it is wider than the pane,
+// the nav is at most as wide as the pane and the label leaves room for its margins (mx-3), as a flex item
+// with align-items-start it would otherwise keep the width of its text
+.pane-label {
+    max-width: calc(100% - 2rem);
+}
+
 // the gap shows the background as a line between split panes
 .pane-container {
     gap: 1px;
