@@ -19,8 +19,11 @@ const Map = ({ mapRef, pane }) => {
 
   const map = findMap(config.groups, pane.map)
 
+  // react-leaflet only uses the options of the MapContainer when the leaflet map is created,
+  // so the key creates a new leaflet map with the zoom limits and attribution of a newly chosen map
   return map && (
     <MapContainer
+      key={map.id}
       ref={mapRef}
       center={view.center}
       zoom={view.zoom}
