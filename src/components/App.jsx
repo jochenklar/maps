@@ -35,7 +35,10 @@ const App = ({ config }) => {
 
     usePanes.setState(usePanes.getInitialState())
     useUI.setState(useUI.getInitialState())
-    setMapsView(mapsRef, config.view.center, config.view.zoom)
+
+    // use the merged config, since the view might only be set in the defaults
+    const { view } = useConfig.getState()
+    setMapsView(mapsRef, view.center, view.zoom)
   }
 
   return groups && (
