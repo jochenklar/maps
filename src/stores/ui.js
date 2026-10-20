@@ -10,6 +10,7 @@ export const useUI = create(
       currentPane: null,
       showGrid: false,
       showCrosshair: false,
+      showLabels: false,
       view: null, // the current center and zoom of the maps, null shows the view from the config
       openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
       closeMapModal: () => set({ showMapModal: false, currentPane: null }),
@@ -17,6 +18,7 @@ export const useUI = create(
       closeInfoModal: () => set({ showInfoModal: false }),
       toggleGrid: () => set((state) => ({ showGrid: !state.showGrid })),
       toggleCrosshair: () => set((state) => ({ showCrosshair: !state.showCrosshair })),
+      toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
       setView: (view) => set((state) => ({ view: { ...state.view, ...view } })),
     })),
     {
@@ -34,6 +36,7 @@ export const useUI = create(
         showInfoModal: state.showInfoModal,
         showGrid: state.showGrid,
         showCrosshair: state.showCrosshair,
+        showLabels: state.showLabels,
         view: state.view,
       }),
     },

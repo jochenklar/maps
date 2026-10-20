@@ -12,6 +12,8 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const toggleGrid = useUI((s) => s.toggleGrid)
   const showCrosshair = useUI((s) => s.showCrosshair)
   const toggleCrosshair = useUI((s) => s.toggleCrosshair)
+  const showLabels = useUI((s) => s.showLabels)
+  const toggleLabels = useUI((s) => s.toggleLabels)
   const openInfoModal = useUI((s) => s.openInfoModal)
   const info = useConfig((s) => s.info)
   const strings = useConfig((s) => s.strings)
@@ -46,6 +48,12 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
             onClick={toggleCrosshair} title={strings.crosshair}
           >
             <i className="bi bi-crosshair"></i>
+          </button>
+          <button
+            className={classNames('btn btn-control', { active: showLabels })}
+            onClick={toggleLabels} title={strings.labels}
+          >
+            <i className="bi bi-tag"></i>
           </button>
         </div>
         <div className="btn-group shadow rounded-3">
