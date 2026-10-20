@@ -35,8 +35,8 @@ const PaneContainer = ({ id, panes, setMapRef }) => {
 }
 
 PaneContainer.propTypes = {
-  id: PropTypes.number,
-  panes: PropTypes.array,
+  id: PropTypes.string,
+  panes: PropTypes.object,
   setMapRef: PropTypes.func
 }
 
