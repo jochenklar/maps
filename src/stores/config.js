@@ -22,6 +22,13 @@ const getBrowserLang = (i18n) => {
   return langs.map((lang) => lang.split('-')[0].toLowerCase()).find((lang) => i18n[lang]) ?? 'en'
 }
 
+// a value which is either the same for all languages or given by language like { de, en },
+// the latter falls back to english or the first language
+const localize = (value, lang) => {
+  if (!isPlainObject(value)) return value
+  return value[lang] ?? value.en ?? Object.values(value)[0]
+}
+
 // find a map from the config by its id, fall back to the first map if the id is unknown
 export const findMap = (groups, id) => {
   const maps = groups?.flatMap((group) => group.maps) ?? []
@@ -41,10 +48,8 @@ export const useConfig = create((set) => ({
     data.lang = getBrowserLang(data.i18n)
     data.strings = { ...data.i18n.en, ...data.i18n[data.lang] }
 
-    // the info is either html or html by language, which falls back to english or the first language
-    if (isPlainObject(data.info)) {
-      data.info = data.info[data.lang] ?? data.info.en ?? Object.values(data.info)[0]
-    }
+    data.brand.text = localize(data.brand.text, data.lang)
+    data.info = localize(data.info, data.lang)
 
     const ids = data.groups.flatMap((group) => group.maps).map((map) => map.id)
     ids.forEach((id, index) => {
