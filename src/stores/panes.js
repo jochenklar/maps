@@ -51,20 +51,33 @@ export const usePanes = create(
           state.panes[pane.id].children = [id1, id2]
         }),
 
+      // remove the pane and let its sibling take the place of the parent, keeping the sibling's own panes
       removePane: (pane) =>
         set((state) => {
           const parentId = state.panes[pane.id].parentId
           const parent = state.panes[parentId]
+          const sibling = state.panes[parent.children.find((childId) => childId !== pane.id)]
 
-          for (const childId of parent.children) {
-            if (childId != pane.id) {
-              parent.map = state.panes[childId].map
-            }
-            delete state.panes[childId]
+          const deletePane = (id) => {
+            state.panes[id].children.forEach(deletePane)
+            delete state.panes[id]
           }
+          deletePane(pane.id)
 
-          parent.direction = null
-          parent.children = []
+          parent.map = sibling.map
+          parent.direction = sibling.direction
+          parent.children = [...sibling.children]
+          delete state.panes[sibling.id]
+
+          // the panes of the sibling move up by one level
+          const moveUp = (id) => {
+            state.panes[id].level--
+            state.panes[id].children.forEach(moveUp)
+          }
+          parent.children.forEach((childId) => {
+            state.panes[childId].parentId = parentId
+            moveUp(childId)
+          })
         }),
 
       changeMap: (pane, mapId) =>
