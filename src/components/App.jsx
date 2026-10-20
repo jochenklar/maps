@@ -17,6 +17,7 @@ const App = ({ config }) => {
   const groups = useConfig((s) => s.groups)
   const geolocateMaxZoom = useConfig((s) => s.geolocate?.maxZoom)
   const searchMaxZoom = useConfig((s) => s.search?.maxZoom)
+  const brandText = useConfig((s) => s.brand?.text)
 
   const panes = usePanes((state) => state.panes)
 
@@ -27,6 +28,10 @@ const App = ({ config }) => {
     init(config)
     return syncUrl(mapsRef)
   }, [init, config])
+
+  useEffect(() => {
+    if (brandText) document.title = brandText
+  }, [brandText])
 
   // reset the panes and the ui to their initial state and move the maps to the view from the config,
   // the persisted state and the url hash are updated by the stores

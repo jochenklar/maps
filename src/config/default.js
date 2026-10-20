@@ -1,6 +1,9 @@
 // the default config, maps.config.js is merged into it: objects are merged, all other values,
 // including arrays like groups, are replaced
 export default {
+  brand: {
+    text: 'Maps',
+  },
   view: {
     center: [
       52.51,
