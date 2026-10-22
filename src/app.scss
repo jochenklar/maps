@@ -126,6 +126,11 @@ nav {
 .map-card {
     cursor: pointer;
 
+    &.active {
+        --bs-card-border-width: 2px;
+        --bs-card-border-color: var(--bs-primary);
+    }
+
     .card-img-top {
         height: 6rem;
         object-fit: cover;

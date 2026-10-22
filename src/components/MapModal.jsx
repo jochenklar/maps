@@ -1,7 +1,8 @@
 import React from 'react'
+import classNames from 'classnames'
 
 import useModal from '../hooks/useModal'
-import { useConfig } from '../stores/config'
+import { findMap, useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
 
@@ -15,6 +16,10 @@ const MapModal = () => {
   const currentPane = useUI((s) => s.currentPane)
 
   const changeMap = usePanes((s) => s.changeMap)
+
+  // the map of the pane where the modal was opened, read from the panes, so that it is up to date after a change
+  const paneMap = usePanes((s) => s.panes[currentPane?.id]?.map)
+  const activeId = paneMap && findMap(groups, paneMap)?.id
 
   const ref = useModal(showMapModal, closeMapModal)
 
@@ -44,7 +49,7 @@ const MapModal = () => {
                         group.maps.map((map, mapIndex) => (
                           <div key={mapIndex} className="col-md-3">
                             <div
-                              className="map-card card h-100"
+                              className={classNames('map-card card h-100', { active: map.id === activeId })}
                               onClick={() => handleClick(map)}
                             >
                               <img

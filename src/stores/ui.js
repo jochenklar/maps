@@ -12,9 +12,9 @@ export const useUI = create(
       showGrid: false,
       showCrosshair: false,
       showLabels: false,
-      view: null, // the current center and zoom of the maps, null shows the view from the config
+      view: null,
       openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
-      closeMapModal: () => set({ showMapModal: false, currentPane: null }),
+      closeMapModal: () => set({ showMapModal: false }),
       openInfoModal: () => set({ showInfoModal: true }),
       closeInfoModal: () => set({ showInfoModal: false }),
       openResetModal: () => set({ showResetModal: true }),
