@@ -25,6 +25,16 @@ nav {
     --bs-btn-disabled-opacity: 1;
 }
 
+// smaller buttons on small screens, like btn-sm, only in the button groups and not in the search,
+// where they need the height of the input
+.btn-group > .btn-control {
+    @media (max-width: 767.98px) {
+        --bs-btn-padding-y: .25rem;
+        --bs-btn-padding-x: .5rem;
+        --bs-btn-font-size: .875rem;
+    }
+}
+
 // full width above the nav buttons on small screens, next to them on larger ones
 .search-group {
     @media (min-width: 768px) {

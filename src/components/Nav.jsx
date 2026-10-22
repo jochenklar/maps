@@ -22,7 +22,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
     <nav className="position-absolute top-0 w-100 d-flex flex-column flex-md-row">
       <Search onSelect={onSearch} />
 
-      <div className="d-flex flex-wrap align-items-start gap-2 mt-3 ms-3 ms-md-0 me-3">
+      <div className="d-flex flex-wrap justify-content-end align-items-start gap-2 mt-2 mt-md-3 ms-3 ms-md-0 me-3">
         <div className="btn-group shadow rounded-3">
           <button className="btn btn-control" onClick={() => onZoom(1)} title={strings.zoomIn}>
             <i className="bi bi-plus-lg"></i>
@@ -33,7 +33,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
         </div>
         <div className="btn-group shadow rounded-3">
           <button className="btn btn-control" onClick={onGeolocate} title={strings.geolocate}>
-            <i className="bi bi-geo-alt"></i>
+            <i className="bi bi-cursor"></i>
           </button>
         </div>
         <div className="btn-group shadow rounded-3 ms-auto ms-md-0">
