@@ -61,7 +61,7 @@ const geolocateMaps = (mapsRef, maxZoom) => {
     const center = latLng(position.coords.latitude, position.coords.longitude)
     fitMapsToBounds(mapsRef, center.toBounds(position.coords.accuracy * 2), maxZoom)
   },
-  () => console.warn('geolocation failed'))
+  (error) => console.warn(`geolocation failed: ${error.message}`))
 }
 
 // returns the ref callback for the MapContainer of the pane with this id

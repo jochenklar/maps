@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
+import useGeolocation from '../hooks/useGeolocation'
 import { useConfig } from '../stores/config'
 import { useUI } from '../stores/ui'
 
@@ -17,6 +18,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const openInfoModal = useUI((s) => s.openInfoModal)
   const info = useConfig((s) => s.info)
   const strings = useConfig((s) => s.strings)
+  const canGeolocate = useGeolocation()
 
   return (
     <nav className="position-absolute top-0 w-100 d-flex flex-column flex-md-row">
@@ -31,11 +33,15 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
             <i className="bi bi-dash-lg"></i>
           </button>
         </div>
-        <div className="btn-group shadow rounded-3">
-          <button className="btn btn-control" onClick={onGeolocate} title={strings.geolocate}>
-            <i className="bi bi-cursor"></i>
-          </button>
-        </div>
+        {
+          canGeolocate && (
+            <div className="btn-group shadow rounded-3">
+              <button className="btn btn-control" onClick={onGeolocate} title={strings.geolocate}>
+                <i className="bi bi-cursor"></i>
+              </button>
+            </div>
+          )
+        }
         <div className="btn-group shadow rounded-3 ms-auto ms-md-0">
           <button
             className={classNames('btn btn-control', { active: showGrid })}

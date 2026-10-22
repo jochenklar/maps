@@ -34,6 +34,9 @@ const Search = ({ onSelect }) => {
     close()
     setQuery(place.display_name)
     onSelect(place)
+
+    // close the keyboard on mobile devices
+    inputRef.current.blur()
   }
 
   const handleSubmit = async (event) => {
@@ -64,7 +67,9 @@ const Search = ({ onSelect }) => {
     inputRef.current.focus()
   }
 
-  // close the results when the focus leaves the search, e.g. by clicking on the map
+  // close the results when the focus leaves the search, e.g. by clicking on the map, the results don't take
+  // the focus when they are pressed (see onMouseDown below), since ios doesn't focus buttons when they are tapped,
+  // so that the results would be closed before the click on them arrives
   const handleBlur = (event) => {
     if (!event.currentTarget.contains(event.relatedTarget)) close()
   }
@@ -127,6 +132,7 @@ const Search = ({ onSelect }) => {
           <div
             ref={listRef}
             className="search-results list-group position-absolute w-100 mt-1 shadow rounded-3"
+            onMouseDown={(event) => event.preventDefault()}
           >
             {error && <div className="list-group-item text-danger">{error}</div>}
             {places?.length === 0 && <div className="list-group-item text-secondary">{strings.noPlaces}</div>}
