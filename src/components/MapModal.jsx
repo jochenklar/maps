@@ -18,10 +18,7 @@ const MapModal = () => {
 
   const ref = useModal(showMapModal, closeMapModal)
 
-  const backgroundImage = (map) => {
-    const thumbnailUrl = map.url.replace('{z}/{x}/{y}', thumbnail)
-    return `url("${thumbnailUrl}")`
-  }
+  const thumbnailUrl = (map) => map.url.replace('{z}/{x}/{y}', thumbnail)
 
   const handleClick = (map) => {
     changeMap(currentPane, map.id)
@@ -50,7 +47,12 @@ const MapModal = () => {
                               className="map-card card h-100"
                               onClick={() => handleClick(map)}
                             >
-                              <div className="card-img-top" style={{backgroundImage: backgroundImage(map)}} />
+                              <img
+                                className="card-img-top"
+                                src={thumbnailUrl(map)}
+                                alt={map.name}
+                                fetchPriority="low"
+                              />
                               <div className="card-body px-2 py-1">
                                 <p className="card-text">
                                   {map.name}

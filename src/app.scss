@@ -127,10 +127,8 @@ nav {
     cursor: pointer;
 
     .card-img-top {
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
         height: 6rem;
+        object-fit: cover;
     }
 
     .card-text {
