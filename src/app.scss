@@ -126,6 +126,8 @@ nav {
 .map-card {
     cursor: pointer;
 
+    scroll-margin-bottom: 1rem;  // space below the selected map, when it is scrolled into view
+
     &.active {
         --bs-card-border-width: 2px;
         --bs-card-border-color: var(--bs-primary);

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classNames from 'classnames'
 
 import useModal from '../hooks/useModal'
@@ -22,6 +22,16 @@ const MapModal = () => {
   const activeId = paneMap && findMap(groups, paneMap)?.id
 
   const ref = useModal(showMapModal, closeMapModal)
+
+  // scroll the selected map into view, once the modal is shown, since it can't be scrolled while it is hidden
+  useEffect(() => {
+    const el = ref.current
+    const handleShown = () => {
+      el.querySelector('.map-card.active')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }
+    el.addEventListener('shown.bs.modal', handleShown)
+    return () => el.removeEventListener('shown.bs.modal', handleShown)
+  }, [ref])
 
   const thumbnailUrl = (map) => map.url.replace('{z}/{x}/{y}', thumbnail)
 
