@@ -33,7 +33,12 @@ const MapModal = () => {
     return () => el.removeEventListener('shown.bs.modal', handleShown)
   }, [ref])
 
-  const thumbnailUrl = (map) => map.url.replace('{z}/{x}/{y}', thumbnail)
+  // the placeholders can be in any order, e.g. {z}/{y}/{x}, and {s} is the first subdomain, like in leaflet
+  const thumbnailUrl = (map) => {
+    const [z, x, y] = thumbnail.split('/')
+    const s = map.options?.subdomains?.[0] ?? 'a'
+    return map.url.replace('{z}', z).replace('{x}', x).replace('{y}', y).replace('{s}', s)
+  }
 
   const handleClick = (map) => {
     changeMap(currentPane, map.id)
