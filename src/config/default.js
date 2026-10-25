@@ -3,9 +3,7 @@ import i18n from './i18n'
 // the default config, maps.config.js is merged into it: objects are merged, all other values,
 // including arrays like groups, are replaced
 export default {
-  brand: {
-    text: 'Maps',
-  },
+  brand: {},
   view: {
     center: [
       52.51,

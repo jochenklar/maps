@@ -20,7 +20,7 @@ const InfoModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">
-              {brand.text}
+              {brand.text ?? document.title}
             </h5>
             <button type="button" className="btn btn-close" data-bs-dismiss="modal" aria-label={strings.close}></button>
           </div>
