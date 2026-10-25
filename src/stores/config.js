@@ -39,10 +39,6 @@ export const findMap = (groups, id) => {
 export const useConfig = create((set) => ({
   init: (config) => {
     const data = mergeConfig(config)
-    data.groups = data.groups.map((group) => ({
-      ...group,
-      maps: group.maps.map((map) => ({ ...map, id: getMapId(map.url) })),
-    }))
 
     // the strings of the language of the browser, missing strings fall back to english
     data.lang = getBrowserLang(data.i18n)
@@ -50,6 +46,12 @@ export const useConfig = create((set) => ({
 
     data.brand.text = localize(data.brand.text, data.lang)
     data.info = localize(data.info, data.lang)
+
+    data.groups = data.groups.map((group) => ({
+      ...group,
+      name: localize(group.name, data.lang),
+      maps: group.maps.map((map) => ({ ...map, id: getMapId(map.url) })),
+    }))
 
     const ids = data.groups.flatMap((group) => group.maps).map((map) => map.id)
     ids.forEach((id, index) => {
