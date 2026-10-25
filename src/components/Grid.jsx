@@ -10,7 +10,7 @@ const steps = [
 // the minimal distance between two vertical grid lines in pixels
 const minDistance = 100
 
-// the lines are drawn in their own pane and are styled in app.scss
+// the lines are drawn in their own pane and are styled in style.scss
 const options = {
   pane: 'grid',
   className: 'grid-line',

@@ -5,8 +5,8 @@ from a configured list, and all panes move and zoom together. It includes a plac
 [Nominatim](https://nominatim.org)), geolocation, a coordinate grid and a center marker. The view and the
 layout of the panes are stored in the url, so that they can be shared.
 
-The app is a [Vite](https://vite.dev) plugin: a project only contains a `maps.config.js` with the maps to show,
-and the plugin provides the app and builds it into a static site.
+The app is a React component: a project is a small [Vite](https://vite.dev) app, which renders the component
+with a `maps.config.js` containing the maps to show, and builds it into a static site.
 
 
 ## Setting up a new project
@@ -25,21 +25,73 @@ Create a directory with a `package.json`:
 }
 ```
 
-Install this package from GitHub and Vite (Node.js 24 is used for development, see `.nvmrc`):
+Install this package from GitHub, React and Vite (Node.js 24 is used for development, see `.nvmrc`):
 
 ```bash
-npm install github:jochenklar/maps vite
+npm install github:jochenklar/maps react react-dom vite @vitejs/plugin-react
 ```
 
-Add a `vite.config.js`, which only uses the plugin:
+Add a `vite.config.js` with the React plugin, the options for scss silence the deprecation warnings of Bootstrap:
 
 ```js
 import { defineConfig } from 'vite'
-import maps from '@jochenklar/maps/vite'
+
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [maps()],
+  plugins: [react()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        quietDeps: true,
+        silenceDeprecations: ['import', 'legacy-js-api', 'global-builtin', 'color-functions'],
+      },
+    },
+  },
 })
+```
+
+Add an `index.html` with the title of the page and, for link previews in messengers and social media, the
+[Open Graph](https://ogp.me) tags, since their crawlers don't run javascript:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Berlin Maps</title>
+    <meta property="og:title" content="Berlin Maps" />
+    <meta property="og:url" content="https://maps.example.com" />
+    <meta property="og:image" content="https://maps.example.com/share.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/main.jsx"></script>
+  </body>
+</html>
+```
+
+Add a `main.jsx`, which renders the app with the config. It imports Bootstrap and its icons, then the styles of
+the app and then the styles of the project, e.g. a `maps.css`:
+
+```jsx
+import React, { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Maps } from '@jochenklar/maps'
+
+import '@jochenklar/maps/bootstrap.scss'
+import '@jochenklar/maps/style.scss'
+import './maps.css'
+
+import config from './maps.config.js'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Maps config={config} />
+  </StrictMode>,
+)
 ```
 
 Add a `maps.config.js` with the maps to show, see [Configuration](#configuration):
@@ -125,9 +177,9 @@ export default {
 ]
 ```
 
-Optionally, add a `public/` directory for static files. Its content is copied into the build, and a
-`public/icon.svg` is used as the favicon. A `maps.css` is loaded after the styles of the app, e.g. to set
-the colors with the [CSS variables of Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
+Optionally, add a `public/` directory for static files, like the favicon. Its content is copied into the build.
+The `maps.css` can be used to set the colors with the
+[CSS variables of Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
 A `.gitignore` should contain at least:
 
@@ -140,6 +192,8 @@ The project then looks like this:
 
 ```
 my-maps/
+├── index.html
+├── main.jsx
 ├── maps.config.js
 ├── maps.css
 ├── package.json
@@ -155,15 +209,13 @@ be served by any web server, and `npm run preview` serves the build locally.
 
 ## Configuration
 
-`maps.config.js` is merged into the [default config](src/config/default.js), so only the values which differ
+The config is merged into the [default config](src/config/default.js), so only the values which differ
 from the defaults need to be set. Objects are merged, all other values, including arrays like `groups`, are
-replaced. Without a `maps.config.js`, only the default config is used.
+replaced. With an empty config `{}`, only the default config is used.
 
 | Key | Default | Description |
 | --- | --- | --- |
 | `brand.text` | `'Maps'` | The title of the page and of the info, or titles by language like `{ de, en }`. |
-| `brand.href` | | The public url of the site, used for link previews. |
-| `brand.image` | | The image of link previews, a url or a path relative to `brand.href`, e.g. `share.png` for a `public/share.png`. |
 | `info` | | HTML which is shown in the info, which opens on the first visit and with the info button, or HTML by language like `{ de, en }`. Without `info`, there is no info button. |
 | `view.center` | `[52.51, 13.37628]` | The initial center as `[lat, lng]`. |
 | `view.zoom` | `10` | The initial zoom level. |
@@ -181,10 +233,6 @@ for subdomains), and `options` with the `attribution`, `minZoom` and `maxZoom` o
 Maps are identified in the url by the path of their tile url before the placeholders, or the hostname if there is
 no path, e.g. `tile.openstreetmap.org` or `berlin/geoportal/luftbilder/2026-dop20rgb`. These ids should be unique
 and only contain letters, numbers, `_`, `-`, `.`, `~` and `/`, otherwise a warning is shown in the console.
-
-For link previews in messengers and social media, the build writes a `<title>` and [Open Graph](https://ogp.me)
-tags into `index.html`: the brand text (in English or the first language), `brand.href` as url and `brand.image`
-as image.
 
 The public Nominatim instance may only be used lightly, see its
 [usage policy](https://operations.osmfoundation.org/policies/nominatim/). For sites with more traffic, set
@@ -219,12 +267,11 @@ cd maps
 npm install
 ```
 
-The repository uses the plugin itself, so `npm run dev` starts the app with the config from a `maps.config.js` and
-the styles from a `maps.css` in the root of the repository, which are ignored by git, or with the default config if
-there is none. Other commands:
+The demo app for development is in `demo/`, which is set up like a project, but uses the component from `src/`
+directly. `npm run dev` starts it with the config from `demo/maps.config.js`. Other commands:
 
 ```bash
-npm run build    # build into dist/
+npm run build    # build into demo/dist/
 npm run preview  # serve the build
 npm run lint     # run eslint
 ```

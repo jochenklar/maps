@@ -8,7 +8,7 @@ import globals from 'globals'
 import js from '@eslint/js'
 
 export default defineConfig([
-  globalIgnores(['dist', 'maps.config.js']),
+  globalIgnores(['**/dist', '**/maps.config.js']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
@@ -95,7 +95,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['vite.config.js', 'src/plugin/**/*.js'],
+    files: ['demo/vite.config.js'],
     languageOptions: {
       globals: globals.node,
     },

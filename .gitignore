@@ -9,8 +9,3 @@ __pycache__/
 
 node_modules/
 dist/
-
-info.*.html
-maps.css
-maps.config.js
-public/

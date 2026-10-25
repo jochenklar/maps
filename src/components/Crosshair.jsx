@@ -5,7 +5,7 @@ const bubbles = [[50, 10], [90, 50], [50, 90], [10, 50]]
 
 // a circle with small bubbles and a dot in the center, similar to the bi-crosshair icon,
 // the geometry is relative to the svg, its size, color, stroke width and the radius
-// of the dot and the bubbles are set in app.scss
+// of the dot and the bubbles are set in style.scss
 const Crosshair = () => {
   return (
     <svg className="crosshair position-absolute top-50 start-50 translate-middle pe-none">
