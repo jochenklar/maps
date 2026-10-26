@@ -17,9 +17,10 @@ const MapModal = () => {
 
   const changeMap = usePanes((s) => s.changeMap)
 
-  // the map of the pane where the modal was opened, read from the panes, so that it is up to date after a change
+  // the map of the pane where the modal was opened, read from the panes, so that it is up to date after a change,
+  // findMap falls back to the first map, which is shown for panes without a map, e.g. after a reset
   const paneMap = usePanes((s) => s.panes[currentPane?.id]?.map)
-  const activeId = paneMap && findMap(groups, paneMap)?.id
+  const activeId = findMap(groups, paneMap)?.id
 
   const ref = useModal(showMapModal, closeMapModal)
 
