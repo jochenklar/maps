@@ -7,5 +7,7 @@ __pycache__/
 *.save
 .DS_Store
 
+*.sh
+
 node_modules/
 dist/
