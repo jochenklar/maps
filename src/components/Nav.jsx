@@ -63,9 +63,19 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
           </button>
         </div>
         <div className="btn-group shadow rounded-3">
-          <button className="btn btn-control" onClick={onReset} title={strings.reset}>
-            <i className="bi bi-arrow-counterclockwise"></i>
+          <button
+            className="btn btn-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            title={strings.options}
+          >
+            <i className="bi bi-wrench"></i>
           </button>
+          <ul className="dropdown-menu dropdown-menu-end shadow">
+            <li>
+              <button className="dropdown-item" onClick={onReset}>
+                <i className="bi bi-arrow-counterclockwise me-2"></i>{strings.reset}
+              </button>
+            </li>
+          </ul>
         </div>
         {
           info && (
