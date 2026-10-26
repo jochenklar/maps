@@ -1,9 +1,16 @@
+import infoDe from './info.de.html?raw'
+import infoEn from './info.en.html?raw'
+
 const osm = '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 const osmFrance = '<a href="https://openstreetmap.fr">OpenStreetMap France</a>'
 
 export default {
   brand: {
     text: 'Maps (development)',
+  },
+  info: {
+    de: infoDe,
+    en: infoEn,
   },
   view: {
     center: [52.51, 13.37628],
