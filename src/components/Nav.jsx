@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
@@ -8,7 +8,7 @@ import { useUI } from '../stores/ui'
 
 import Search from './Search.jsx'
 
-const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
+const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onReset }) => {
   const showGrid = useUI((s) => s.showGrid)
   const toggleGrid = useUI((s) => s.toggleGrid)
   const showCrosshair = useUI((s) => s.showCrosshair)
@@ -19,6 +19,22 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
   const info = useConfig((s) => s.info)
   const strings = useConfig((s) => s.strings)
   const canGeolocate = useGeolocation()
+
+  // show a check instead of the wrench for a moment after the link was copied
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (copied) {
+      const timeout = setTimeout(() => setCopied(false), 2000)
+      return () => clearTimeout(timeout)
+    }
+  }, [copied])
+
+  const handleCopyLink = () => {
+    onCopyLink()
+      .then(() => setCopied(true))
+      .catch((error) => console.warn('the link could not be copied', error))
+  }
 
   return (
     <nav className="position-absolute top-0 w-100 d-flex flex-column flex-md-row">
@@ -65,11 +81,18 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onReset }) => {
         <div className="btn-group shadow rounded-3">
           <button
             className="btn btn-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            data-bs-display="static"
             title={strings.options}
           >
-            <i className="bi bi-wrench"></i>
+            <i className={copied ? 'bi bi-check-lg' : 'bi bi-wrench'}></i>
           </button>
           <ul className="dropdown-menu dropdown-menu-end shadow">
+            <li>
+              <button className="dropdown-item" onClick={handleCopyLink}>
+                <i className="bi bi-link-45deg me-2"></i>{strings.copyLink}
+              </button>
+            </li>
+            <li><hr className="dropdown-divider" /></li>
             <li>
               <button className="dropdown-item" onClick={onReset}>
                 <i className="bi bi-arrow-counterclockwise me-2"></i>{strings.reset}
@@ -95,6 +118,7 @@ Nav.propTypes = {
   onSearch: PropTypes.func,
   onZoom: PropTypes.func,
   onGeolocate: PropTypes.func,
+  onCopyLink: PropTypes.func,
   onReset: PropTypes.func
 }
 

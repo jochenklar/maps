@@ -6,7 +6,7 @@ import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
 import { fitMapsToBounds, geolocateMaps, setMapRef, setMapsView, zoomMaps } from '../utils/maps'
 import { getPlaceBounds } from '../utils/search'
-import { syncUrl } from '../utils/url'
+import { getShareUrl, syncUrl } from '../utils/url'
 
 import InfoModal from './InfoModal.jsx'
 import MapModal  from './MapModal.jsx'
@@ -59,6 +59,7 @@ const App = ({ config }) => {
         onZoom={(delta) => zoomMaps(mapsRef, delta)}
         onSearch={(place) => fitMapsToBounds(mapsRef, getPlaceBounds(place), searchMaxZoom)}
         onGeolocate={() => geolocateMaps(mapsRef, geolocateMaxZoom)}
+        onCopyLink={() => navigator.clipboard.writeText(getShareUrl())}
         onReset={openResetModal}
       />
       <div className="d-flex panes">

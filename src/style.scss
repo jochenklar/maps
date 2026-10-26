@@ -35,6 +35,12 @@ nav {
     }
 }
 
+// the dropdown menus of the button groups are placed with css (data-bs-display="static"),
+// with the same gap as between the buttons (gap-2)
+.btn-group > .dropdown-menu {
+    --bs-dropdown-spacer: .5rem;
+}
+
 // full width above the nav buttons on small screens, next to them on larger ones
 .search-group {
     @media (min-width: 768px) {
