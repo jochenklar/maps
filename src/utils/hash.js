@@ -132,4 +132,4 @@ const parseHash = (hash, { maxLevel }) => {
   return result
 }
 
-export { formatHash, isValidMapId, parseHash }
+export { formatHash, formatView, isValidMapId, parseHash }

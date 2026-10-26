@@ -4,7 +4,7 @@ import { findMap, useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
 
-import { formatHash, parseHash } from './hash'
+import { formatHash, formatView, parseHash } from './hash'
 import { setMapsView } from './maps'
 
 // apply the panes, the view and the overlays from the url hash, this overrides the persisted state
@@ -15,6 +15,9 @@ const applyHash = (mapsRef) => {
   if (flags) useUI.setState(flags)
   if (view) setMapsView(mapsRef, view.center, view.zoom)
 }
+
+// the current view, or the one from the config before the maps were moved
+const getView = () => useUI.getState().view ?? useConfig.getState().view
 
 // the url hash for the current panes, view and overlays
 const getHash = () => {
@@ -28,6 +31,22 @@ const getHash = () => {
 
 // the url to share the current location, built from the stores, since the url hash is written debounced
 const getShareUrl = () => new URL(getHash(), window.location.href).href
+
+// the url of an external map showing the current view, {zoom}, {lat} and {lng} in the url are replaced,
+// otherwise the view is appended as #map=zoom/lat/lng, like on openstreetmap.org, a function as url gets
+// the view as { zoom, lat, lng }, rounded like in the url hash
+const getExternalUrl = (url) => {
+  const view = formatView(getView())
+  if (typeof url === 'function') {
+    const [zoom, lat, lng] = view.split('/').map(Number)
+    return url({ zoom, lat, lng })
+  }
+  if (!/\{(zoom|lat|lng)\}/.test(url)) {
+    return `${url}#map=${view}`
+  }
+  const [zoom, lat, lng] = view.split('/')
+  return url.replaceAll('{zoom}', zoom).replaceAll('{lat}', lat).replaceAll('{lng}', lng)
+}
 
 // write the panes, the view and the overlays to the url hash, so that the url can be shared,
 // debounced since the view changes with every move and browsers limit replaceState
@@ -54,4 +73,4 @@ const syncUrl = (mapsRef) => {
   }
 }
 
-export { getShareUrl, syncUrl }
+export { getExternalUrl, getShareUrl, syncUrl }

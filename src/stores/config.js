@@ -46,6 +46,7 @@ export const useConfig = create((set) => ({
 
     data.brand.text = localize(data.brand.text, data.lang)
     data.info = localize(data.info, data.lang)
+    data.external = data.external.map((external) => ({ ...external, name: localize(external.name, data.lang) }))
 
     data.groups = data.groups.map((group) => ({
       ...group,

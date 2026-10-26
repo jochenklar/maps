@@ -8,7 +8,7 @@ import { useUI } from '../stores/ui'
 
 import Search from './Search.jsx'
 
-const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onReset }) => {
+const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onReset }) => {
   const showGrid = useUI((s) => s.showGrid)
   const toggleGrid = useUI((s) => s.toggleGrid)
   const showCrosshair = useUI((s) => s.showCrosshair)
@@ -17,6 +17,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onReset }) => {
   const toggleLabels = useUI((s) => s.toggleLabels)
   const openInfoModal = useUI((s) => s.openInfoModal)
   const info = useConfig((s) => s.info)
+  const external = useConfig((s) => s.external)
   const strings = useConfig((s) => s.strings)
   const canGeolocate = useGeolocation()
 
@@ -93,6 +94,23 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onReset }) => {
               </button>
             </li>
             <li><hr className="dropdown-divider" /></li>
+            {
+              external.length > 0 && (
+                <>
+                  {
+                    external.map(({ name, url }) => (
+                      <li key={name}>
+                        <button className="dropdown-item" onClick={() => onOpenExternal(url)}>
+                          <i className="bi bi-box-arrow-up-right me-2"></i>
+                          {strings.openExternal.replace('{name}', name)}
+                        </button>
+                      </li>
+                    ))
+                  }
+                  <li><hr className="dropdown-divider" /></li>
+                </>
+              )
+            }
             <li>
               <button className="dropdown-item" onClick={onReset}>
                 <i className="bi bi-arrow-counterclockwise me-2"></i>{strings.reset}
@@ -119,6 +137,7 @@ Nav.propTypes = {
   onZoom: PropTypes.func,
   onGeolocate: PropTypes.func,
   onCopyLink: PropTypes.func,
+  onOpenExternal: PropTypes.func,
   onReset: PropTypes.func
 }
 
