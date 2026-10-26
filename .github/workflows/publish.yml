@@ -1,0 +1,30 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write  # required for npm trusted publishing (OIDC) and provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+
+      - name: Set the package version from the release tag
+        run: npm version "${GITHUB_REF_NAME#v}" --no-git-tag-version
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - name: Publish
+        run: npm publish ${{ github.event.release.prerelease && '--tag next' || '' }}

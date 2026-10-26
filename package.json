@@ -1,7 +1,10 @@
 {
   "name": "@jochenklar/maps",
-  "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0-dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jochenklar/maps.git"
+  },
   "type": "module",
   "exports": {
     ".": "./src/index.js",
@@ -48,5 +51,8 @@
   "peerDependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

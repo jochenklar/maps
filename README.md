@@ -25,10 +25,10 @@ Create a directory with a `package.json`:
 }
 ```
 
-Install this package from GitHub, React and Vite (Node.js 24 is used for development, see `.nvmrc`):
+Install this package from npm, React and Vite (Node.js 24 is used for development, see `.nvmrc`):
 
 ```bash
-npm install github:jochenklar/maps react react-dom vite @vitejs/plugin-react
+npm install @jochenklar/maps react react-dom vite @vitejs/plugin-react
 ```
 
 Add a `vite.config.js` with the React plugin, the options for scss silence the deprecation warnings of Bootstrap:
@@ -279,3 +279,11 @@ npm run lint     # run eslint
 
 The same commands are available as `make dev`, `make build`, `make lint` and `make preview`. Checks for each
 commit are configured for [pre-commit](https://pre-commit.com) in `.pre-commit-config.yaml`.
+
+
+## Releasing
+
+Releases are published to [npm](https://www.npmjs.com/package/@jochenklar/maps) by the GitHub workflow in
+`.github/workflows/publish.yml`, when a release is published on GitHub. The version is taken from the tag of
+the release (e.g. `v1.2.0` or `1.2.0`), the version in `package.json` is only a placeholder. Releases marked as
+pre-release on GitHub are published with the `next` dist-tag.
