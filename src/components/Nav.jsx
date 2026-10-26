@@ -88,6 +88,15 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
             <i className={copied ? 'bi bi-check-lg' : 'bi bi-wrench'}></i>
           </button>
           <ul className="dropdown-menu dropdown-menu-end shadow">
+            {
+              info && (
+                <li>
+                  <button className="dropdown-item" onClick={openInfoModal}>
+                    <i className="bi bi-info-circle me-2"></i>{strings.info}
+                  </button>
+                </li>
+              )
+            }
             <li>
               <button className="dropdown-item" onClick={handleCopyLink}>
                 <i className="bi bi-link-45deg me-2"></i>{strings.copyLink}
@@ -118,15 +127,6 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
             </li>
           </ul>
         </div>
-        {
-          info && (
-            <div className="btn-group shadow rounded-3">
-              <button className="btn btn-control" onClick={openInfoModal} title={strings.info}>
-                <i className="bi bi-info-circle"></i>
-              </button>
-            </div>
-          )
-        }
       </div>
     </nav>
   )
