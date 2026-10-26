@@ -1,13 +1,17 @@
 .PHONY: dev build lint preview
 
+SHELL := /bin/bash
+
+NVM = . $(NVM_DIR)/nvm.sh && nvm use --silent &&
+
 dev:
-	npm run dev
+	$(NVM) npm run dev
 
 build:
-	npm run build
+	$(NVM) npm run build
 
 lint:
-	npm run lint
+	$(NVM) npm run lint
 
 preview:
-	npm run preview
+	$(NVM) npm run preview
