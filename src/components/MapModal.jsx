@@ -59,7 +59,7 @@ const MapModal = () => {
               {
                 groups.map((group, groupIndex) => (
                   <div key={groupIndex} className="container">
-                    <h6 className="mb-3">{group.name}</h6>
+                    {group.name && <h6 className="mb-3">{group.name}</h6>}
                     <div className="row g-3">
                       {
                         group.maps.map((map, mapIndex) => (

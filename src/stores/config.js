@@ -48,7 +48,12 @@ export const useConfig = create((set) => ({
     data.info = localize(data.info, data.lang)
     data.external = data.external.map((external) => ({ ...external, name: localize(external.name, data.lang) }))
 
-    data.groups = data.groups.map((group) => ({
+    // the maps are either a flat array of maps, which are shown as one group without a name,
+    // or an array of groups like { name, maps }
+    const groups = data.maps.every((item) => item.maps) ? data.maps : [{ maps: data.maps }]
+    delete data.maps
+
+    data.groups = groups.map((group) => ({
       ...group,
       name: localize(group.name, data.lang),
       maps: group.maps.map((map) => ({ ...map, id: getMapId(map.url) })),

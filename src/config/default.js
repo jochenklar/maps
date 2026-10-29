@@ -1,7 +1,7 @@
 import i18n from './i18n'
 
 // the default config, maps.config.js is merged into it: objects are merged, all other values,
-// including arrays like groups, are replaced
+// including arrays like maps, are replaced
 export default {
   brand: {},
   view: {
@@ -47,20 +47,16 @@ export default {
   ],
   // the texts of the interface by language, the language is taken from the browser, see src/config/i18n.js
   i18n,
-  groups: [
+  // the maps, either as a flat array or in groups like { name, maps }
+  maps: [
     {
-      name: 'Maps',
-      maps: [
-        {
-          name: 'OpenStreetMap',
-          url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          options: {
-            attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-            minZoom: 0,
-            maxZoom: 19,
-          },
-        },
-      ],
+      name: 'OpenStreetMap',
+      url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      options: {
+        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        minZoom: 0,
+        maxZoom: 19,
+      },
     },
   ],
 }

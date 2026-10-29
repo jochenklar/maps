@@ -105,27 +105,22 @@ export default {
     center: [52.51, 13.37628],
     zoom: 12,
   },
-  groups: [
+  maps: [
     {
-      name: 'Maps',
-      maps: [
-        {
-          name: 'OpenStreetMap',
-          url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          options: {
-            attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-            maxZoom: 19,
-          },
-        },
-        {
-          name: 'OpenTopoMap',
-          url: 'https://tile.opentopomap.org/{z}/{x}/{y}.png',
-          options: {
-            attribution: '<a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
-            maxZoom: 17,
-          },
-        },
-      ],
+      name: 'OpenStreetMap',
+      url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      options: {
+        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        maxZoom: 19,
+      },
+    },
+    {
+      name: 'OpenTopoMap',
+      url: 'https://tile.opentopomap.org/{z}/{x}/{y}.png',
+      options: {
+        attribution: '<a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
+        maxZoom: 17,
+      },
     },
   ],
 }
@@ -149,15 +144,16 @@ export default {
 Similarly, the list of maps, which tends to get long, can be kept in a `maps.json` and imported:
 
 ```js
-import groups from './maps.json'
+import maps from './maps.json'
 
 export default {
-  groups,
+  maps,
   // ...
 }
 ```
 
-`maps.json` then contains the array of groups, like `groups` above:
+`maps.json` then contains the array of maps, like `maps` above, or of groups with a `name` and their `maps`, which
+are shown under their name in the map selection:
 
 ```json
 [
@@ -210,7 +206,7 @@ be served by any web server, and `npm run preview` serves the build locally.
 ## Configuration
 
 The config is merged into the [default config](src/config/default.js), so only the values which differ
-from the defaults need to be set. Objects are merged, all other values, including arrays like `groups`, are
+from the defaults need to be set. Objects are merged, all other values, including arrays like `maps`, are
 replaced. With an empty config `{}`, only the default config is used.
 
 | Key | Default | Description |
@@ -226,9 +222,9 @@ replaced. With an empty config `{}`, only the default config is used.
 | `thumbnail` | `'13/4400/2686'` | The tile (`zoom/x/y`) which is shown for each map in the map selection. |
 | `external` | OpenStreetMap, Google Maps, Google Earth | The external maps in the options menu, which open the current view, like `[{ name, url }]`. `{zoom}`, `{lat}` and `{lng}` in the `url` are replaced, e.g. `https://www.google.com/maps/@{lat},{lng},{zoom}z`, urls without them get `#map=zoom/lat/lng` appended, like on openstreetmap.org. The `url` can also be a function, which gets the view as `{ zoom, lat, lng }` and returns the url, e.g. for Google Earth, which needs a camera distance instead of a zoom level. The `name` can also be given by language like `{ de, en }`, `[]` hides them. To add one to the defaults, use `import { defaults } from '@jochenklar/maps'` and `external: [...defaults.external, { name, url }]`. |
 | `i18n` | English and German | The texts of the interface by language, see [src/config/i18n.js](src/config/i18n.js), e.g. `{ de: { search: 'Ortssuche' } }` to change a single string or `{ fr: { … } }` to add a language. The first language of the browser which has texts is used, otherwise English. Missing strings fall back to English, `searchAttribution` is HTML. |
-| `groups` | OpenStreetMap | The maps, in groups like `[{ name, maps }]`, see below. The `name` of a group can also be given by language like `{ de, en }`. |
+| `maps` | OpenStreetMap | The maps, either as a flat array or in groups like `[{ name, maps }]`, see below. The `name` of a group can also be given by language like `{ de, en }`. |
 
-Each map in `groups` has a `name`, a tile `url` with `{z}`, `{x}` and `{y}` placeholders (and optionally `{s}`
+Each map in `maps` has a `name`, a tile `url` with `{z}`, `{x}` and `{y}` placeholders (and optionally `{s}`
 for subdomains), and `options` with the `attribution`, `minZoom` and `maxZoom` of the tile layer.
 
 Maps are identified in the url by the path of their tile url before the placeholders, or the hostname if there is
