@@ -95,7 +95,7 @@ const Search = ({ onSelect }) => {
 
   return (
     <div
-      className="search-group position-relative mt-3 ms-3 me-3 me-md-auto"
+      className="search-group position-relative ms-3 me-3 me-md-auto"
       onBlur={handleBlur} onKeyDown={handleKeyDown}
     >
       <form className="input-group shadow rounded-pill" onSubmit={handleSubmit}>

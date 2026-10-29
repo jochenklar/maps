@@ -22,6 +22,20 @@ export default {
     maxLevel: 3,
   },
   thumbnail: '13/4400/2686',
+  // which parts of the interface are shown: the search, the buttons in the nav, the button of a pane which opens
+  // the modal to choose its map, and the filmstrip, a strip with the thumbnails of all maps above the search and
+  // the buttons
+  show: {
+    search: true,
+    zoom: true,
+    geolocate: true,
+    grid: true,
+    crosshair: true,
+    labels: true,
+    options: true,
+    modal: true,
+    filmstrip: false,
+  },
   // the external maps which can show the current view, {zoom}, {lat} and {lng} in the url are replaced,
   // urls without them get the view appended as #map=zoom/lat/lng, like on openstreetmap.org,
   // the url can also be a function which gets { zoom, lat, lng } and returns the url

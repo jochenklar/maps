@@ -9,9 +9,10 @@ import PaneNav from './PaneNav.jsx'
 
 const Pane = ({ pane, mapRef }) => {
   const showCrosshair = useUI((s) => s.showCrosshair)
+  const setActivePane = useUI((s) => s.setActivePane)
 
   return (
-    <section className="position-relative flex-fill">
+    <section className="position-relative flex-fill" onPointerDownCapture={() => setActivePane(pane.id)}>
       <div className="pane h-100">
         <Map mapRef={mapRef} pane={pane} />
       </div>

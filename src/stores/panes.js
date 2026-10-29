@@ -14,6 +14,14 @@ const createPane = (id, parentId = null, level = 0, map = null) => {
   }
 }
 
+// the pane which is changed by the filmstrip: the active pane, or the first pane inside of it if it was split,
+// or the first pane if there is no active pane or it was closed
+export const getActivePane = (panes, id) => {
+  let pane = panes[id] ?? panes.root
+  while (pane.children.length > 0) pane = panes[pane.children[0]]
+  return pane
+}
+
 export const usePanes = create(
   persist(
     immer((set) => ({

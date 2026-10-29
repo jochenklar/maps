@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import classNames from 'classnames'
 
 import useModal from '../hooks/useModal'
-import { findMap, useConfig } from '../stores/config'
+import { findMap, getThumbnailUrl, useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
 
@@ -34,13 +34,6 @@ const MapModal = () => {
     return () => el.removeEventListener('shown.bs.modal', handleShown)
   }, [ref])
 
-  // the placeholders can be in any order, e.g. {z}/{y}/{x}, and {s} is the first subdomain, like in leaflet
-  const thumbnailUrl = (map) => {
-    const [z, x, y] = thumbnail.split('/')
-    const s = map.options?.subdomains?.[0] ?? 'a'
-    return map.url.replace('{z}', z).replace('{x}', x).replace('{y}', y).replace('{s}', s)
-  }
-
   const handleClick = (map) => {
     changeMap(currentPane, map.id)
     closeMapModal()
@@ -70,7 +63,7 @@ const MapModal = () => {
                             >
                               <img
                                 className="card-img-top"
-                                src={thumbnailUrl(map)}
+                                src={getThumbnailUrl(map, thumbnail)}
                                 alt={map.name}
                                 fetchPriority="low"
                               />

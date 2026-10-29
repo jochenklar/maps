@@ -13,6 +13,7 @@ const PaneNav = ({ pane }) => {
   const groups = useConfig((s) => s.groups)
   const maxLevel = useConfig((s) => s.panes.maxLevel)
   const strings = useConfig((s) => s.strings)
+  const show = useConfig((s) => s.show)
 
   return (
     <nav className="position-absolute bottom-0 start-0 d-flex flex-column align-items-start mw-100">
@@ -24,11 +25,15 @@ const PaneNav = ({ pane }) => {
         )
       }
       <div className="d-flex gap-2 ms-3 mb-3">
-        <div className="btn-group shadow rounded-3">
-          <button className="btn btn-control" onClick={() => openMapModal(pane)} title={strings.chooseMap}>
-            <i className="bi bi-map"></i>
-          </button>
-        </div>
+        {
+          show.modal && (
+            <div className="btn-group shadow rounded-3">
+              <button className="btn btn-control" onClick={() => openMapModal(pane)} title={strings.chooseMap}>
+                <i className="bi bi-map"></i>
+              </button>
+            </div>
+          )
+        }
 
         {
           (pane.level < maxLevel || pane.level > 0) && (

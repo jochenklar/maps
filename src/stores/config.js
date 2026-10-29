@@ -35,6 +35,14 @@ export const findMap = (groups, id) => {
   return maps.find((map) => map.id === id) ?? maps[0]
 }
 
+// the url of the thumbnail tile (zoom/x/y) of a map, the placeholders can be in any order, e.g. {z}/{y}/{x},
+// and {s} is the first subdomain, like in leaflet
+export const getThumbnailUrl = (map, thumbnail) => {
+  const [z, x, y] = thumbnail.split('/')
+  const s = map.options?.subdomains?.[0] ?? 'a'
+  return map.url.replace('{z}', z).replace('{x}', x).replace('{y}', y).replace('{s}', s)
+}
+
 // the config from maps.config.js merged into the defaults, it is set once by init and not persisted
 export const useConfig = create((set) => ({
   init: (config) => {

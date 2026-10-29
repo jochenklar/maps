@@ -75,6 +75,38 @@ nav {
     height: 100dvh;
 }
 
+// the filmstrip above the search and the buttons, the selected map has a border
+.filmstrip {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+}
+
+// the thumbnails of the maps, with the name in the lower right corner and a border for the selected map
+.filmstrip-item {
+    --bs-btn-border-width: 2px;
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-border-color: var(--bs-primary-border-subtle);
+    --bs-btn-active-border-color: var(--bs-primary);
+    --bs-btn-border-radius: var(--bs-border-radius-lg);
+
+    // squares when the strip scrolls, wider to fill the strip when all of them fit
+    flex: 1 0 4.5rem;
+    height: 4.5rem;
+    overflow: hidden;
+    scroll-margin-inline: .5rem;  // space next to the selected map, when it is scrolled into view
+
+    img {
+        object-fit: cover;
+    }
+
+    .filmstrip-name {
+        max-width: 100%;
+        font-size: .875rem;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, .9);
+    }
+}
+
 // the name of the map above the pane buttons, cut off with an ellipsis if it is wider than the pane,
 // the nav is at most as wide as the pane and the label leaves room for its margins (mx-3), as a flex item
 // with align-items-start it would otherwise keep the width of its text
