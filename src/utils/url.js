@@ -8,12 +8,12 @@ import { formatHash, formatView, parseHash } from './hash'
 import { setMapsView } from './maps'
 
 // apply the panes, the view and the overlays from the url hash, this overrides the persisted state
-const applyHash = (mapsRef) => {
+const applyHash = (view) => {
   const { maxLevel } = useConfig.getState().panes
-  const { panes, view, flags } = parseHash(window.location.hash, { maxLevel })
+  const { panes, view: hashView, flags } = parseHash(window.location.hash, { maxLevel })
   if (panes) usePanes.getState().setPanes(panes)
   if (flags) useUI.setState(flags)
-  if (view) setMapsView(mapsRef, view.center, view.zoom)
+  if (hashView) setMapsView(view, hashView.center, hashView.zoom)
 }
 
 // the current view, or the one from the config before the maps were moved
@@ -55,10 +55,10 @@ const writeHash = debounce(() => {
 }, 300)
 
 // keep the url hash and the stores in sync, returns a function to stop syncing
-const syncUrl = (mapsRef) => {
-  const handleHashChange = () => applyHash(mapsRef)
+const syncUrl = (view) => {
+  const handleHashChange = () => applyHash(view)
 
-  applyHash(mapsRef)
+  applyHash(view)
   writeHash()
 
   const unsubscribeUI = useUI.subscribe(writeHash)

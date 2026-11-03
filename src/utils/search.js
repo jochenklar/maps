@@ -1,4 +1,4 @@
-import { latLngBounds } from 'leaflet'
+import { transformExtent } from 'ol/proj'
 
 // search for places with nominatim, see https://nominatim.org/release-docs/latest/api/Search/,
 // the usage policy forbids searching while typing, so this should only be called on submit
@@ -11,10 +11,11 @@ const searchPlaces = async (url, query) => {
   return response.json()
 }
 
-// the bounding box of a place from nominatim is [south, north, west, east] as strings
-const getPlaceBounds = (place) => {
+// the bounding box of a place from nominatim is [south, north, west, east] as strings,
+// the extent is [west, south, east, north] in web mercator
+const getPlaceExtent = (place) => {
   const [south, north, west, east] = place.boundingbox.map(Number)
-  return latLngBounds([south, west], [north, east])
+  return transformExtent([west, south, east, north], 'EPSG:4326', 'EPSG:3857')
 }
 
-export { getPlaceBounds, searchPlaces }
+export { getPlaceExtent, searchPlaces }

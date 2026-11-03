@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import View from 'ol/View'
 
 import { useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
-import { fitMapsToBounds, geolocateMaps, setMapRef, setMapsView, zoomMaps } from '../utils/maps'
-import { getPlaceBounds } from '../utils/search'
+import { fitMapsToExtent, geolocateMaps, setMapsView, setZoomLimits, storeViewOnChange, zoomMaps } from '../utils/maps'
+import { getPlaceExtent } from '../utils/search'
 import { getExternalUrl, getShareUrl, syncUrl } from '../utils/url'
 
 import InfoModal from './InfoModal.jsx'
@@ -26,13 +27,24 @@ const App = ({ config }) => {
   const panes = usePanes((state) => state.panes)
   const openResetModal = useUI((s) => s.openResetModal)
 
-  // the leaflet maps of all panes by pane id, and whether they are currently synced, see utils/maps.js
-  const mapsRef = useRef({ maps: {}, isSyncing: false })
+  // the openlayers view which is shared by the maps of all panes, so that they move and zoom together,
+  // the zoom levels are kept at integers, see utils/maps.js
+  const [view] = useState(() => new View({ constrainResolution: true }))
+
+  // before the init, so that the view from the url hash is stored
+  useEffect(() => storeViewOnChange(view), [view])
 
   useEffect(() => {
     init(config)
-    return syncUrl(mapsRef)
-  }, [init, config])
+
+    // start at the persisted view or the one from the config, the url hash overrides it in syncUrl
+    const { groups, view: configView } = useConfig.getState()
+    const { center, zoom } = useUI.getState().view ?? configView
+    setZoomLimits(view, groups)
+    setMapsView(view, center, zoom)
+
+    return syncUrl(view)
+  }, [init, config, view])
 
   useEffect(() => {
     if (brandText) document.title = brandText
@@ -49,26 +61,22 @@ const App = ({ config }) => {
     useUI.setState(useUI.getInitialState())
 
     // use the merged config, since the view might only be set in the defaults
-    const { view } = useConfig.getState()
-    setMapsView(mapsRef, view.center, view.zoom)
-  }, [])
+    const { center, zoom } = useConfig.getState().view
+    setMapsView(view, center, zoom)
+  }, [view])
 
   return groups && (
     <main>
       <Nav
-        onZoom={(delta) => zoomMaps(mapsRef, delta)}
-        onSearch={(place) => fitMapsToBounds(mapsRef, getPlaceBounds(place), searchMaxZoom)}
-        onGeolocate={() => geolocateMaps(mapsRef, geolocateMaxZoom)}
+        onZoom={(delta) => zoomMaps(view, delta)}
+        onSearch={(place) => fitMapsToExtent(view, getPlaceExtent(place), searchMaxZoom)}
+        onGeolocate={() => geolocateMaps(view, geolocateMaxZoom)}
         onCopyLink={() => navigator.clipboard.writeText(getShareUrl())}
         onOpenExternal={(url) => window.open(getExternalUrl(url), '_blank', 'noopener')}
         onReset={openResetModal}
       />
       <div className="d-flex panes">
-        <PaneContainer
-          id="root"
-          panes={panes}
-          setMapRef={(id) => setMapRef(mapsRef, id)}
-        />
+        <PaneContainer id="root" panes={panes} view={view} />
       </div>
       <MapModal />
       <ResetModal onReset={handleReset} />

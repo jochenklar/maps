@@ -1,101 +1,69 @@
-import { latLng } from 'leaflet'
-import { isUndefined } from 'lodash'
+import { circular } from 'ol/geom/Polygon'
+import { unByKey } from 'ol/Observable'
+import { fromLonLat, toLonLat } from 'ol/proj'
 
 import { useUI } from '../stores/ui'
 
-// all functions take mapsRef, a ref to { maps, isSyncing } (see App.jsx), where maps are the leaflet
-// maps of all panes by pane id, and isSyncing is true while the maps are moved from here,
-// so that their move events are ignored
+// all functions take the openlayers view, which is shared by the maps of all panes (see App.jsx), so that they
+// move and zoom together, its coordinates are in web mercator, while centers outside of it are [lat, lng]
 
-const getFirstMap = (mapsRef) => Object.values(mapsRef.current.maps)[0]
+// the duration of the zoom animation in milliseconds
+const duration = 250
 
-const forEachMap = (mapsRef, callback) => {
-  mapsRef.current.isSyncing = true
-  Object.values(mapsRef.current.maps).forEach(callback)
-  mapsRef.current.isSyncing = false
+const storeView = (view) => {
+  if (!view.isDef()) return
+
+  const [lng, lat] = toLonLat(view.getCenter())
+  useUI.getState().setView({ center: [lat, lng], zoom: view.getZoom() })
 }
 
-const storeView = (map) => {
-  const { lat, lng } = map.getCenter()
-  useUI.getState().setView({ center: [lat, lng], zoom: map.getZoom() })
+// store the view whenever the maps move, returns a function to stop
+const storeViewOnChange = (view) => {
+  const keys = view.on(['change:center', 'change:resolution'], () => storeView(view))
+  return () => unByKey(keys)
 }
 
-// move all maps without syncing and store the view
-const setMapsView = (mapsRef, center, zoom) => {
-  forEachMap(mapsRef, (map) => map.setView(center, zoom, { animate: false }))
-  useUI.getState().setView({ center, zoom })
+// the zoom limits of the view, from the lowest minZoom to the highest maxZoom of all maps,
+// maps are shown with their last tiles enlarged beyond their own maxZoom
+const setZoomLimits = (view, groups) => {
+  const maps = groups.flatMap((group) => group.maps)
+  view.setMinZoom(Math.min(...maps.map((map) => map.options?.minZoom ?? 0)))
+  view.setMaxZoom(Math.max(...maps.map((map) => map.options?.maxZoom ?? 18)))
 }
 
-// zoom all maps by delta, around center if given
-const zoomMaps = (mapsRef, delta, center) => {
-  const source = getFirstMap(mapsRef)
-  if (!source) return
-
-  forEachMap(mapsRef, (map) => {
-    if (isUndefined(center)) {
-      map.setZoom(map.getZoom() + delta)
-    } else {
-      map.setZoomAround(center, map.getZoom() + delta)
-    }
-  })
-
-  storeView(source)
+// move all maps without animation
+const setMapsView = (view, center, zoom) => {
+  const [lat, lng] = center
+  view.cancelAnimations()
+  view.setCenter(fromLonLat([lng, lat]))
+  view.setZoom(zoom)
 }
 
-// move all maps to the center of the bounds and zoom so that the bounds fit into the map,
+// zoom all maps by delta, around anchor (in web mercator) if given
+const zoomMaps = (view, delta, anchor) => {
+  if (!view.isDef()) return
+
+  const zoom = view.getConstrainedZoom(view.getZoom() + delta)
+  view.cancelAnimations()
+  view.animate({ zoom, anchor, duration })
+}
+
+// move all maps to the center of the extent (in web mercator) and zoom so that the extent fits into the maps,
 // but not further than maxZoom
-const fitMapsToBounds = (mapsRef, bounds, maxZoom = Infinity) => {
-  const source = getFirstMap(mapsRef)
-  if (!source) return
-
-  const { lat, lng } = bounds.getCenter()
-  const zoom = Math.min(source.getBoundsZoom(bounds), maxZoom)
-
-  setMapsView(mapsRef, [lat, lng], zoom)
+const fitMapsToExtent = (view, extent, maxZoom) => {
+  view.cancelAnimations()
+  view.fit(extent, { maxZoom })
 }
 
 // move all maps to the current position, zoom so that the accuracy circle (radius in meters)
 // fits into the map, but not further than maxZoom
-const geolocateMaps = (mapsRef, maxZoom) => {
+const geolocateMaps = (view, maxZoom) => {
   navigator.geolocation.getCurrentPosition((position) => {
-    const center = latLng(position.coords.latitude, position.coords.longitude)
-    fitMapsToBounds(mapsRef, center.toBounds(position.coords.accuracy * 2), maxZoom)
+    const { latitude, longitude, accuracy } = position.coords
+    const circle = circular([longitude, latitude], accuracy).transform('EPSG:4326', 'EPSG:3857')
+    fitMapsToExtent(view, circle.getExtent(), maxZoom)
   },
   (error) => console.warn(`geolocation failed: ${error.message}`))
 }
 
-// returns the ref callback for the MapContainer of the pane with this id
-const setMapRef = (mapsRef, id) => (map) => {
-  const { maps } = mapsRef.current
-
-  if (map) {
-    maps[id] = map
-
-    const moveHandler = () => {
-      if (mapsRef.current.isSyncing) return
-
-      const center = map.getCenter()
-      const zoom = map.getZoom()
-      forEachMap(mapsRef, (other) => {
-        if (other !== map) other.setView(center, zoom, { animate: false })
-      })
-
-      storeView(map)
-    }
-    const dblclickHandler = (e) => zoomMaps(mapsRef, 1, e.latlng)
-    map.on('move', moveHandler)
-    map.on('dblclick', dblclickHandler)
-
-    // stash the handler so we can remove it on cleanup
-    map.__moveHandler = moveHandler
-    map.__dblclickHandler = dblclickHandler
-  } else {
-    // remove stashed handlers
-    const old = maps[id]
-    if (old?.__moveHandler) old.off('move', old.__moveHandler)
-    if (old?.__dblclickHandler) old.off('dblclick', old.__dblclickHandler)
-    delete maps[id]
-  }
-}
-
-export { fitMapsToBounds, geolocateMaps, setMapRef, setMapsView, zoomMaps }
+export { fitMapsToExtent, geolocateMaps, setMapsView, setZoomLimits, storeViewOnChange, zoomMaps }

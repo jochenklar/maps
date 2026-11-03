@@ -7,14 +7,14 @@ import Crosshair from './Crosshair.jsx'
 import Map from './Map.jsx'
 import PaneNav from './PaneNav.jsx'
 
-const Pane = ({ pane, mapRef }) => {
+const Pane = ({ pane, view }) => {
   const showCrosshair = useUI((s) => s.showCrosshair)
   const setActivePane = useUI((s) => s.setActivePane)
 
   return (
     <section className="position-relative flex-fill" onPointerDownCapture={() => setActivePane(pane.id)}>
       <div className="pane h-100">
-        <Map mapRef={mapRef} pane={pane} />
+        <Map pane={pane} view={view} />
       </div>
       {showCrosshair && <Crosshair />}
       <PaneNav pane={pane} />
@@ -24,7 +24,7 @@ const Pane = ({ pane, mapRef }) => {
 
 Pane.propTypes = {
   pane: PropTypes.object,
-  mapRef: PropTypes.func
+  view: PropTypes.object
 }
 
 export default Pane

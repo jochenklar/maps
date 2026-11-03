@@ -26,10 +26,9 @@
     "bootstrap-icons": "^1.13.1",
     "classnames": "^2.5.1",
     "immer": "^11.1.8",
-    "leaflet": "^1.9.4",
     "lodash": "^4.17.23",
+    "ol": "^10.11.0",
     "prop-types": "^15.8.1",
-    "react-leaflet": "^5.0.0",
     "sass": "^1.98.0",
     "zustand": "^5.0.12"
   },

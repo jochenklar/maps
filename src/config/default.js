@@ -22,6 +22,9 @@ export default {
     maxLevel: 3,
   },
   thumbnail: '13/4400/2686',
+  // the options of the tiles, like the transition, the duration in milliseconds in which they fade in,
+  // missing options use the defaults of openlayers
+  tiles: {},
   // which parts of the interface are shown: the search, the buttons in the nav, the button of a pane which opens
   // the modal to choose its map, and the filmstrip, a strip with the thumbnails of all maps above the search and
   // the buttons

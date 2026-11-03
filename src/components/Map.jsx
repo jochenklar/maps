@@ -1,52 +1,63 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { MapContainer, TileLayer } from 'react-leaflet'
+import { defaults as defaultControls } from 'ol/control/defaults'
+import { defaults as defaultInteractions } from 'ol/interaction/defaults'
+import TileLayer from 'ol/layer/Tile'
+import OlMap from 'ol/Map'
+import { unByKey } from 'ol/Observable'
 
 import { findMap, useConfig } from '../stores/config'
 import { useUI } from '../stores/ui'
+import { createGrid } from '../utils/grid'
+import { zoomMaps } from '../utils/maps'
+import { getSource } from '../utils/sources'
 
-import Grid from './Grid.jsx'
+import 'ol/ol.css'
 
-import 'leaflet/dist/leaflet.css'
-
-const Map = ({ mapRef, pane }) => {
-  const config = useConfig()
+const Map = ({ pane, view }) => {
+  const groups = useConfig((s) => s.groups)
+  const transition = useConfig((s) => s.tiles.transition)
   const showGrid = useUI((s) => s.showGrid)
 
-  // the view is only used when the map is created, so it is read without subscribing,
-  // otherwise all maps would re-render on every move
-  const view = useUI.getState().view ?? config.view
+  const map = findMap(groups, pane.map)
 
-  const map = findMap(config.groups, pane.map)
+  // the layers are created once per pane, a newly chosen map only replaces the source of the tile layer
+  const [layers] = useState(() => ({ tiles: new TileLayer(), grid: createGrid() }))
+  const targetRef = useRef(null)
 
-  // react-leaflet only uses the options of the MapContainer when the leaflet map is created,
-  // so the key creates a new leaflet map with the zoom limits and attribution of a newly chosen map
-  return map && (
-    <MapContainer
-      key={map.id}
-      ref={mapRef}
-      center={view.center}
-      zoom={view.zoom}
-      style={{ height: '100%', width: '100%' }}
-      zoomControl={false}
-      doubleClickZoom={false}
-      minZoom={map.options.minZoom}
-      maxZoom={map.options.maxZoom}
-    >
-      <TileLayer
-        url={map.url}
-        attribution={map.options.attribution}
-        minZoom={map.options.minZoom}
-        maxZoom={map.options.maxZoom}
-      />
-      {showGrid && <Grid />}
-    </MapContainer>
-  )
+  // all maps share the view, so that they move and zoom together, see utils/maps.js
+  useEffect(() => {
+    const olMap = new OlMap({
+      target: targetRef.current,
+      view,
+      layers: [layers.tiles, layers.grid],
+      controls: defaultControls({ zoom: false, rotate: false, attributionOptions: { collapsible: false } }),
+      interactions: defaultInteractions({ doubleClickZoom: false, altShiftDragRotate: false, pinchRotate: false }),
+    })
+
+    // double clicks zoom like the zoom buttons, around the clicked point
+    const key = olMap.on('dblclick', (event) => zoomMaps(view, 1, event.coordinate))
+
+    return () => {
+      unByKey(key)
+      olMap.dispose()
+    }
+  }, [view, layers])
+
+  useEffect(() => {
+    layers.tiles.setSource(map ? getSource(map, transition) : null)
+  }, [layers, map, transition])
+
+  useEffect(() => {
+    layers.grid.setVisible(showGrid)
+  }, [layers, showGrid])
+
+  return <div ref={targetRef} className="h-100 w-100" />
 }
 
 Map.propTypes = {
-  mapRef: PropTypes.object,
-  pane: PropTypes.object
+  pane: PropTypes.object,
+  view: PropTypes.object
 }
 
 export default Map

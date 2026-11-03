@@ -73,6 +73,10 @@ nav {
 .panes {
     height: 100vh;
     height: 100dvh;
+
+    // a stacking context for the pane navs and the crosshair, which also have z-indexes, so that they stay
+    // below the nav with its dropdowns, which comes earlier in the dom
+    isolation: isolate;
 }
 
 // the filmstrip above the search and the buttons, the selected map has a border
@@ -114,6 +118,11 @@ nav {
     max-width: calc(100% - 2rem);
 }
 
+// shown behind the tiles while they are loading, light like in leaflet, instead of the dark lines between the panes
+.pane {
+    background-color: #ddd;
+}
+
 // the gap shows the background as a line between split panes
 .pane-container {
     gap: 1px;
@@ -122,24 +131,14 @@ nav {
 
 // keep the attribution clear of the pane buttons in the lower left corner (at most 4 buttons and the margins),
 // in narrow panes it is cut off with an ellipsis instead of wrapping into more lines
-.leaflet-bottom.leaflet-right {
+.ol-attribution {
     max-width: calc(100% - 200px);
 
-    .leaflet-control-attribution {
-        max-width: 100%;
+    ul {
+        min-width: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
-}
-
-.leaflet-grid-pane {
-    z-index: 450;
-    pointer-events: none;
-
-    .grid-line {
-        stroke: white;
-        stroke-width: 1px;
     }
 }
 
