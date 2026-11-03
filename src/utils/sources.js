@@ -2,10 +2,10 @@ import XYZ from 'ol/source/XYZ'
 
 // the tile source of a map from the config, {s} is replaced by each of the subdomains, like in leaflet
 const createSource = (map, transition) => new XYZ({
-  urls: [...(map.options?.subdomains ?? 'abc')].map((s) => map.url.replace('{s}', s)),
-  attributions: map.options?.attribution,
-  minZoom: map.options?.minZoom ?? 0,
-  maxZoom: map.options?.maxZoom ?? 18,
+  urls: [...(map.subdomains ?? 'abc')].map((s) => map.url.replace('{s}', s)),
+  attributions: map.attribution,
+  minZoom: map.minZoom,
+  maxZoom: map.maxZoom,
   transition
 })
 

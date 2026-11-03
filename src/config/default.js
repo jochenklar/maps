@@ -10,6 +10,8 @@ export default {
       13.37628,
     ],
     zoom: 10,
+    minZoom: 0,
+    maxZoom: 20,
   },
   geolocate: {
     maxZoom: 18,
@@ -69,11 +71,7 @@ export default {
     {
       name: 'OpenStreetMap',
       url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-        minZoom: 0,
-        maxZoom: 19,
-      },
+      attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
     },
   ],
 }

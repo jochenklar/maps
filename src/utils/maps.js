@@ -23,12 +23,12 @@ const storeViewOnChange = (view) => {
   return () => unByKey(keys)
 }
 
-// the zoom limits of the view, from the lowest minZoom to the highest maxZoom of all maps,
-// maps are shown with their last tiles enlarged beyond their own maxZoom
-const setZoomLimits = (view, groups) => {
+// the zoom limits of the view, the narrowest range of minZoom and maxZoom from the config and of all maps
+// which set them, so that every map has tiles at every zoom level
+const setZoomLimits = (view, { minZoom, maxZoom }, groups) => {
   const maps = groups.flatMap((group) => group.maps)
-  view.setMinZoom(Math.min(...maps.map((map) => map.options?.minZoom ?? 0)))
-  view.setMaxZoom(Math.max(...maps.map((map) => map.options?.maxZoom ?? 18)))
+  view.setMinZoom(Math.max(minZoom, ...maps.map((map) => map.minZoom ?? minZoom)))
+  view.setMaxZoom(Math.min(maxZoom, ...maps.map((map) => map.maxZoom ?? maxZoom)))
 }
 
 // move all maps without animation

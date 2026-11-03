@@ -109,18 +109,14 @@ export default {
     {
       name: 'OpenStreetMap',
       url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-        maxZoom: 19,
-      },
+      attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+      maxZoom: 19,
     },
     {
       name: 'OpenTopoMap',
       url: 'https://tile.opentopomap.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: '<a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
-        maxZoom: 17,
-      },
+      attribution: '<a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)',
+      maxZoom: 17,
     },
   ],
 }
@@ -163,10 +159,8 @@ are shown under their name in the map selection:
       {
         "name": "OpenStreetMap",
         "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "options": {
-          "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap contributors</a>",
-          "maxZoom": 19
-        }
+        "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap contributors</a>",
+        "maxZoom": 19
       }
     ]
   }
@@ -215,6 +209,8 @@ replaced. With an empty config `{}`, only the default config is used.
 | `info` | | HTML which is shown in the info, which opens on the first visit and with the info entry in the options menu, or HTML by language like `{ de, en }`. Without `info`, there is no info entry. |
 | `view.center` | `[52.51, 13.37628]` | The initial center as `[lat, lng]`. |
 | `view.zoom` | `10` | The initial zoom level. |
+| `view.minZoom` | `0` | The minimal zoom level, it is raised to the highest `minZoom` of the maps. The maps can't be zoomed out further than the world fills the screen, so on large screens the lowest zoom level is higher, e.g. `4` for screens wider than 2048 pixels. |
+| `view.maxZoom` | `20` | The maximal zoom level, it is lowered to the lowest `maxZoom` of the maps. |
 | `geolocate.maxZoom` | `18` | The maximal zoom level when moving to the current location. |
 | `search.url` | `https://nominatim.openstreetmap.org/search` | The url of a [Nominatim search API](https://nominatim.org/release-docs/latest/api/Search/). |
 | `search.maxZoom` | `18` | The maximal zoom level when moving to a search result. |
@@ -227,7 +223,8 @@ replaced. With an empty config `{}`, only the default config is used.
 | `maps` | OpenStreetMap | The maps, either as a flat array or in groups like `[{ name, maps }]`, see below. The `name` of a group can also be given by language like `{ de, en }`. |
 
 Each map in `maps` has a `name`, a tile `url` with `{z}`, `{x}` and `{y}` placeholders (and optionally `{s}`
-for subdomains), and `options` with the `attribution`, `minZoom` and `maxZoom` of the tile layer.
+for the `subdomains`, `'abc'` by default), the `attribution` as HTML, and optionally the `minZoom` and `maxZoom`
+of its tiles, which limit the zoom levels of the view, see `view.minZoom` and `view.maxZoom`.
 
 Maps are identified in the url by the path of their tile url before the placeholders, or the hostname if there is
 no path, e.g. `tile.openstreetmap.org` or `berlin/geoportal/luftbilder/2026-dop20rgb`. These ids should be unique

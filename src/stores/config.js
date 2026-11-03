@@ -39,7 +39,7 @@ export const findMap = (groups, id) => {
 // and {s} is the first subdomain, like in leaflet
 export const getThumbnailUrl = (map, thumbnail) => {
   const [z, x, y] = thumbnail.split('/')
-  const s = map.options?.subdomains?.[0] ?? 'a'
+  const s = map.subdomains?.[0] ?? 'a'
   return map.url.replace('{z}', z).replace('{x}', x).replace('{y}', y).replace('{s}', s)
 }
 

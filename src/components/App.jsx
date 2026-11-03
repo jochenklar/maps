@@ -40,7 +40,7 @@ const App = ({ config }) => {
     // start at the persisted view or the one from the config, the url hash overrides it in syncUrl
     const { groups, view: configView } = useConfig.getState()
     const { center, zoom } = useUI.getState().view ?? configView
-    setZoomLimits(view, groups)
+    setZoomLimits(view, configView, groups)
     setMapsView(view, center, zoom)
 
     return syncUrl(view)

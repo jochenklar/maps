@@ -20,26 +20,17 @@ export default {
     {
       name: 'Standard',
       url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      options: {
-        attribution: osm,
-        maxZoom: 19,
-      },
+      attribution: osm,
     },
     {
       name: 'CyclOSM',
       url: 'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
-      options: {
-        attribution: `${osm}, <a href="https://www.cyclosm.org">CyclOSM</a> hosted by ${osmFrance}`,
-        maxZoom: 20,
-      },
+      attribution: `${osm}, <a href="https://www.cyclosm.org">CyclOSM</a> hosted by ${osmFrance}`,
     },
     {
       name: 'Humanitarian',
       url: 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-      options: {
-        attribution: `${osm}, <a href="https://www.hotosm.org">Humanitarian OpenStreetMap Team</a> hosted by ${osmFrance}`,
-        maxZoom: 20,
-      },
+      attribution: `${osm}, <a href="https://www.hotosm.org">Humanitarian OpenStreetMap Team</a> hosted by ${osmFrance}`,
     },
   ],
 }
