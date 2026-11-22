@@ -13,6 +13,7 @@ export const useUI = create(
       showGrid: false,
       showCrosshair: false,
       showLabels: false,
+      showLegend: false,
       view: null,
       setActivePane: (id) => set({ activePane: id }),
       openMapModal: (pane) => set({ showMapModal: true, currentPane: pane }),
@@ -24,6 +25,7 @@ export const useUI = create(
       toggleGrid: () => set((state) => ({ showGrid: !state.showGrid })),
       toggleCrosshair: () => set((state) => ({ showCrosshair: !state.showCrosshair })),
       toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
+      toggleLegend: () => set((state) => ({ showLegend: !state.showLegend })),
       setView: (view) => set((state) => ({ view: { ...state.view, ...view } })),
     })),
     {
@@ -42,6 +44,7 @@ export const useUI = create(
         showGrid: state.showGrid,
         showCrosshair: state.showCrosshair,
         showLabels: state.showLabels,
+        showLegend: state.showLegend,
         view: state.view,
       }),
     },

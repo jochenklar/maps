@@ -224,7 +224,9 @@ replaced. With an empty config `{}`, only the default config is used.
 
 Each map in `maps` has a `name`, a tile `url` with `{z}`, `{x}` and `{y}` placeholders (and optionally `{s}`
 for the `subdomains`, `'abc'` by default), the `attribution` as HTML, and optionally the `minZoom` and `maxZoom`
-of its tiles, which limit the zoom levels of the view, see `view.minZoom` and `view.maxZoom`.
+of its tiles, which limit the zoom levels of the view, see `view.minZoom` and `view.maxZoom`. A map can also
+have the url of an image as `legend`, which is shown in the lower right corner of its pane when the legends are
+turned on in the `options` menu (not on small screens).
 
 Maps are identified in the url by the path of their tile url before the placeholders, or the hostname if there is
 no path, e.g. `tile.openstreetmap.org` or `berlin/geoportal/luftbilder/2026-dop20rgb`. These ids should be unique
@@ -247,8 +249,8 @@ The url hash contains the layout of the panes and the view, e.g.
 - `panes=v(a,b)` is a pane split vertically (side by side), `panes=h(a,b)` one split horizontally (on top of each
   other), and `a` and `b` can be split again.
 - `map=zoom/lat/lng` is the view, like on openstreetmap.org.
-- `show=grid,crosshair,labels` lists the overlays which are shown: the coordinate grid, the center marker and the
-  names of the maps. It is left out if none are shown.
+- `show=grid,crosshair,labels,legend` lists the overlays which are shown: the coordinate grid, the center marker,
+  the names of the maps and their legends. It is left out if none are shown.
 
 Without a hash, the last layout and view are restored from the browser's local storage.
 

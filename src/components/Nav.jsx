@@ -16,10 +16,13 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
   const toggleCrosshair = useUI((s) => s.toggleCrosshair)
   const showLabels = useUI((s) => s.showLabels)
   const toggleLabels = useUI((s) => s.toggleLabels)
+  const showLegend = useUI((s) => s.showLegend)
+  const toggleLegend = useUI((s) => s.toggleLegend)
   const openInfoModal = useUI((s) => s.openInfoModal)
   const show = useConfig((s) => s.show)
   const info = useConfig((s) => s.info)
   const external = useConfig((s) => s.external)
+  const groups = useConfig((s) => s.groups)
   const strings = useConfig((s) => s.strings)
   const canGeolocate = useGeolocation()
 
@@ -40,6 +43,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
   }
 
   const showOverlays = show.grid || show.crosshair || show.labels
+  const hasLegend = groups.some((group) => group.maps.some((map) => map.legend))
 
   const buttonsClass = classNames('d-flex flex-wrap justify-content-end align-items-start gap-2 me-3', {
     'mt-2 mt-md-0 ms-3 ms-md-0': show.search,
@@ -127,6 +131,15 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
                       <li>
                         <button className="dropdown-item" onClick={openInfoModal}>
                           <i className="bi bi-info-circle me-2"></i>{strings.info}
+                        </button>
+                      </li>
+                    )
+                  }
+                  {
+                    hasLegend && (
+                      <li className="d-none d-md-block">
+                        <button className="dropdown-item" onClick={toggleLegend}>
+                          <i className="bi bi-list-ul me-2"></i>{showLegend ? strings.hideLegend : strings.showLegend}
                         </button>
                       </li>
                     )

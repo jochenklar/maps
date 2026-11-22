@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 import { useUI } from '../stores/ui'
 
 import Crosshair from './Crosshair.jsx'
+import Legend from './Legend.jsx'
 import Map from './Map.jsx'
 import PaneNav from './PaneNav.jsx'
 
 const Pane = ({ pane, view }) => {
-  const showCrosshair = useUI((s) => s.showCrosshair)
   const setActivePane = useUI((s) => s.setActivePane)
 
   return (
@@ -16,7 +16,8 @@ const Pane = ({ pane, view }) => {
       <div className="pane h-100">
         <Map pane={pane} view={view} />
       </div>
-      {showCrosshair && <Crosshair />}
+      <Crosshair />
+      <Legend pane={pane} />
       <PaneNav pane={pane} />
     </section>
   )

@@ -118,6 +118,17 @@ nav {
     max-width: calc(100% - 2rem);
 }
 
+// the legend of the map in the lower right corner, above the attribution, large but within the pane and below
+// the nav buttons on the top of the page (pt-3 and the height of a button), scrollable if the image is larger
+// than that, it is not shown on small screens (d-none d-md-block)
+.pane-legend {
+    z-index: 500;
+    margin-bottom: 2rem;
+    max-width: calc(100% - 2rem);
+    max-height: calc(100% - 2rem - 4rem);
+    overflow: auto;
+}
+
 // shown behind the tiles while they are loading, light like in leaflet, instead of the dark lines between the panes
 .pane {
     background-color: #ddd;

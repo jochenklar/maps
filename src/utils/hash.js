@@ -16,6 +16,7 @@ const overlays = {
   grid: 'showGrid',
   crosshair: 'showCrosshair',
   labels: 'showLabels',
+  legend: 'showLegend',
 }
 
 // map ids are used without encoding, so they are restricted to letters, numbers, '_', '-', '.', '~' and '/'
