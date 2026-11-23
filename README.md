@@ -254,6 +254,9 @@ The url hash contains the layout of the panes and the view, e.g.
 
 Without a hash, the last layout and view are restored from the browser's local storage.
 
+The interface follows the color scheme of the system: in dark mode, it uses the dark theme of Bootstrap, the maps are
+not changed.
+
 
 ## Development
 

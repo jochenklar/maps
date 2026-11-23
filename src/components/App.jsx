@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import View from 'ol/View'
 
+import useColorScheme from '../hooks/useColorScheme'
 import { useConfig } from '../stores/config'
 import { usePanes } from '../stores/panes'
 import { useUI } from '../stores/ui'
@@ -26,6 +27,9 @@ const App = ({ config }) => {
 
   const panes = usePanes((state) => state.panes)
   const openResetModal = useUI((s) => s.openResetModal)
+
+  // the interface follows the light or dark mode of the system
+  useColorScheme()
 
   // the openlayers view which is shared by the maps of all panes, so that they move and zoom together,
   // the zoom levels are kept at integers, see utils/maps.js

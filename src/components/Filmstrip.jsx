@@ -35,7 +35,7 @@ const Filmstrip = () => {
   }
 
   return (
-    <div className="filmstrip d-flex gap-2 p-2 mx-3 bg-white shadow rounded-3" ref={ref} onWheel={handleWheel}>
+    <div className="filmstrip d-flex gap-2 p-2 mx-3 bg-body shadow rounded-3" ref={ref} onWheel={handleWheel}>
       {
         groups.flatMap((group) => group.maps).map((map) => (
           <button

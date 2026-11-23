@@ -1,15 +1,16 @@
 // mobile safari shows the background of the body behind its status bar and toolbar
 body {
-    background-color: white;
+    background-color: var(--bs-body-bg);
 }
 
 nav {
     z-index: 500;
 }
 
-// white icon buttons with light borders, used in groups with a shadow over the maps
+// icon buttons in the color of the body (white, or dark in the dark mode of the system) with light borders, used in groups with
+// a shadow over the maps
 .btn-control {
-    --bs-btn-bg: white;
+    --bs-btn-bg: var(--bs-body-bg);
     --bs-btn-border-color: var(--bs-border-color-translucent);
     --bs-btn-border-radius: var(--bs-border-radius-lg);
     --bs-btn-hover-bg: var(--bs-tertiary-bg);
@@ -19,7 +20,7 @@ nav {
     --bs-btn-active-border-color: var(--bs-border-color-translucent);
 
     // keep the shape when disabled, e.g. the search button while it shows the spinner
-    --bs-btn-disabled-bg: white;
+    --bs-btn-disabled-bg: var(--bs-body-bg);
     --bs-btn-disabled-color: var(--bs-body-color);
     --bs-btn-disabled-border-color: var(--bs-border-color-translucent);
     --bs-btn-disabled-opacity: 1;
@@ -130,8 +131,21 @@ nav {
 }
 
 // shown behind the tiles while they are loading, light like in leaflet, instead of the dark lines between the panes
+// and dark in dark mode
 .pane {
     background-color: #ddd;
+
+    [data-bs-theme="dark"] & {
+        background-color: #222;
+    }
+}
+
+// the attribution of openlayers is dark in dark mode as well
+[data-bs-theme="dark"] .ol-attribution {
+    --ol-background-color: var(--bs-body-bg);
+    --ol-partial-background-color: rgba(var(--bs-body-bg-rgb), .75);
+    --ol-foreground-color: var(--bs-body-color);
+    --ol-subtle-foreground-color: var(--bs-secondary-color);
 }
 
 // the gap shows the background as a line between split panes
