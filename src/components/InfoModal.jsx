@@ -15,11 +15,11 @@ const InfoModal = () => {
   const ref = useModal(showInfoModal, closeInfoModal)
 
   return (
-    <div className="modal" ref={ref} tabIndex="-1">
+    <div className="modal" ref={ref} tabIndex="-1" aria-labelledby="info-modal-title">
       <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
+            <h5 className="modal-title" id="info-modal-title">
               {brand.text ?? document.title}
             </h5>
             <button type="button" className="btn btn-close" data-bs-dismiss="modal" aria-label={strings.close}></button>

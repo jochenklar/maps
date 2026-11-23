@@ -19,6 +19,23 @@ const Search = ({ onSelect }) => {
   const listRef = useRef(null)
   const inputRef = useRef(null)
 
+  // the input is a combobox for screen readers, which controls the list of places, the highlighted place
+  // is its active descendant, while the focus stays in the input, the ids are fixed, since there is only one search
+  const listId = 'search-places'
+  const getOptionId = (index) => `search-place-${index}`
+  const expanded = places?.length > 0
+  const isActive = (index) => index === activeIndex
+
+  // announced by screen readers, since the results are not focused
+  let status = ''
+  if (loading) {
+    status = strings.searching
+  } else if (error) {
+    status = error
+  } else if (places) {
+    status = places.length > 0 ? strings.placesFound.replace('{count}', places.length) : strings.noPlaces
+  }
+
   // keep the highlighted place visible when the list scrolls
   useEffect(() => {
     listRef.current?.querySelector('.active')?.scrollIntoView({ block: 'nearest' })
@@ -102,6 +119,9 @@ const Search = ({ onSelect }) => {
         <input
           ref={inputRef} type="text" className="form-control rounded-start-pill ps-3" placeholder={strings.search}
           aria-label={strings.search} value={query} onChange={(event) => setQuery(event.target.value)}
+          role="combobox" aria-autocomplete="list" aria-expanded={expanded}
+          aria-controls={expanded ? listId : undefined}
+          aria-activedescendant={expanded && activeIndex >= 0 ? getOptionId(activeIndex) : undefined}
         />
         {
           query && (
@@ -119,7 +139,7 @@ const Search = ({ onSelect }) => {
         >
           {
             loading ? (
-              <span className="spinner-border spinner-border-sm" role="status" aria-label={strings.searching} />
+              <span className="spinner-border spinner-border-sm" aria-hidden="true" />
             ) : (
               <i className="bi bi-search"></i>
             )
@@ -127,33 +147,52 @@ const Search = ({ onSelect }) => {
         </button>
       </form>
 
+      <div className="visually-hidden" role="status" aria-live="polite">{status}</div>
+
       {
         (places || error) && (
+          // the places are in their own list group, since a listbox may only contain the options,
+          // the messages and the attribution are in list groups before and after it
           <div
             ref={listRef}
-            className="search-results list-group position-absolute w-100 mt-1 shadow rounded-3"
+            className="search-results position-absolute w-100 mt-1 bg-body border shadow rounded-3"
             onMouseDown={(event) => event.preventDefault()}
           >
-            {error && <div className="list-group-item text-danger">{error}</div>}
-            {places?.length === 0 && <div className="list-group-item text-secondary">{strings.noPlaces}</div>}
             {
-              places?.map((place, index) => (
-                <button
-                  key={place.place_id} type="button"
-                  className={classNames('list-group-item list-group-item-action', { active: index === activeIndex })}
-                  onClick={() => handleSelect(place)}
-                  onMouseEnter={() => setActiveIndex(index)}
-                >
-                  {place.display_name}
-                </button>
-              ))
+              (error || places?.length === 0) && (
+                <div className="list-group list-group-flush">
+                  {error && <div className="list-group-item text-danger">{error}</div>}
+                  {places?.length === 0 && <div className="list-group-item text-secondary">{strings.noPlaces}</div>}
+                </div>
+              )
+            }
+            {
+              expanded && (
+                <div id={listId} className="list-group list-group-flush" role="listbox" aria-label={strings.search}>
+                  {
+                    places.map((place, index) => (
+                      <button
+                        key={place.place_id} id={getOptionId(index)} type="button" tabIndex="-1"
+                        role="option" aria-selected={isActive(index)}
+                        className={classNames('list-group-item list-group-item-action', { active: isActive(index) })}
+                        onClick={() => handleSelect(place)}
+                        onMouseEnter={() => setActiveIndex(index)}
+                      >
+                        {place.display_name}
+                      </button>
+                    ))
+                  }
+                </div>
+              )
             }
             {
               places && (
-                <div
-                  className="list-group-item search-attribution text-secondary"
-                  dangerouslySetInnerHTML={{ __html: strings.searchAttribution }}
-                />
+                <div className="list-group list-group-flush">
+                  <div
+                    className="list-group-item search-attribution text-secondary"
+                    dangerouslySetInnerHTML={{ __html: strings.searchAttribution }}
+                  />
+                </div>
               )
             }
           </div>

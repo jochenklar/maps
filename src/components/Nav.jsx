@@ -51,7 +51,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
   })
 
   return (
-    <nav className="position-absolute top-0 w-100 d-flex flex-column gap-2 pt-3">
+    <nav className="position-absolute top-0 w-100 d-flex flex-column gap-2 pt-3" aria-label={strings.controls}>
       {show.filmstrip && <Filmstrip />}
 
       <div className="d-flex flex-column flex-md-row">
@@ -61,10 +61,16 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
           {
             show.zoom && (
               <div className="btn-group shadow rounded-3">
-                <button className="btn btn-control" onClick={() => onZoom(1)} title={strings.zoomIn}>
+                <button
+                  className="btn btn-control" onClick={() => onZoom(1)} title={strings.zoomIn}
+                  aria-label={strings.zoomIn}
+                >
                   <i className="bi bi-plus-lg"></i>
                 </button>
-                <button className="btn btn-control" onClick={() => onZoom(-1)} title={strings.zoomOut}>
+                <button
+                  className="btn btn-control" onClick={() => onZoom(-1)} title={strings.zoomOut}
+                  aria-label={strings.zoomOut}
+                >
                   <i className="bi bi-dash-lg"></i>
                 </button>
               </div>
@@ -73,7 +79,10 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
           {
             show.geolocate && canGeolocate && (
               <div className="btn-group shadow rounded-3">
-                <button className="btn btn-control" onClick={onGeolocate} title={strings.geolocate}>
+                <button
+                  className="btn btn-control" onClick={onGeolocate} title={strings.geolocate}
+                  aria-label={strings.geolocate}
+                >
                   <i className="bi bi-cursor"></i>
                 </button>
               </div>
@@ -87,6 +96,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
                     <button
                       className={classNames('btn btn-control', { active: showGrid })}
                       onClick={toggleGrid} title={strings.grid}
+                      aria-label={strings.grid} aria-pressed={showGrid}
                     >
                       <i className="bi bi-grid-3x3"></i>
                     </button>
@@ -97,6 +107,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
                     <button
                       className={classNames('btn btn-control', { active: showCrosshair })}
                       onClick={toggleCrosshair} title={strings.crosshair}
+                      aria-label={strings.crosshair} aria-pressed={showCrosshair}
                     >
                       <i className="bi bi-crosshair"></i>
                     </button>
@@ -107,6 +118,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
                     <button
                       className={classNames('btn btn-control', { active: showLabels })}
                       onClick={toggleLabels} title={strings.labels}
+                      aria-label={strings.labels} aria-pressed={showLabels}
                     >
                       <i className="bi bi-tag"></i>
                     </button>
@@ -121,7 +133,7 @@ const Nav = ({ onSearch, onZoom, onGeolocate, onCopyLink, onOpenExternal, onRese
                 <button
                   className="btn btn-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
                   data-bs-display="static"
-                  title={strings.options}
+                  title={strings.options} aria-label={strings.options}
                 >
                   <i className={copied ? 'bi bi-check-lg' : 'bi bi-wrench'}></i>
                 </button>

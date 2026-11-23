@@ -18,6 +18,7 @@ const Map = ({ pane, view }) => {
   const groups = useConfig((s) => s.groups)
   const transition = useConfig((s) => s.tiles.transition)
   const showGrid = useUI((s) => s.showGrid)
+  const strings = useConfig((s) => s.strings)
 
   const map = findMap(groups, pane.map)
 
@@ -52,7 +53,13 @@ const Map = ({ pane, view }) => {
     layers.grid.setVisible(showGrid)
   }, [layers, showGrid])
 
-  return <div ref={targetRef} className="h-100 w-100" />
+  return (
+    <div
+      ref={targetRef} className="pane-map h-100 w-100" tabIndex="0" role="application"
+      aria-label={strings.mapLabel.replace('{name}', map?.name ?? '')}
+      aria-description={strings.mapKeys}
+    />
+  )
 }
 
 Map.propTypes = {

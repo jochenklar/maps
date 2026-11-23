@@ -41,6 +41,7 @@ const Filmstrip = () => {
           <button
             key={map.id}
             className={classNames('filmstrip-item btn p-0 position-relative', { active: map.id === activeId })}
+            aria-current={map.id === activeId}
             onClick={() => changeMap(pane, map.id)}
             title={map.name}
           >

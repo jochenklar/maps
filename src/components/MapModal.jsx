@@ -40,11 +40,11 @@ const MapModal = () => {
   }
 
   return (
-    <div className="modal" ref={ref} tabIndex="-1">
+    <div className="modal" ref={ref} tabIndex="-1" aria-labelledby="map-modal-title">
       <div className="modal-dialog modal-xl">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">{strings.maps}</h5>
+            <h5 className="modal-title" id="map-modal-title">{strings.maps}</h5>
             <button type="button" className="btn btn-close" data-bs-dismiss="modal" aria-label={strings.close}></button>
           </div>
           <div className="modal-body px-1">
@@ -57,8 +57,10 @@ const MapModal = () => {
                       {
                         group.maps.map((map, mapIndex) => (
                           <div key={mapIndex} className="col-md-3">
-                            <div
+                            <button
+                              type="button"
                               className={classNames('map-card card h-100', { active: map.id === activeId })}
+                              aria-current={map.id === activeId}
                               onClick={() => handleClick(map)}
                             >
                               <img
@@ -72,7 +74,7 @@ const MapModal = () => {
                                   {map.name}
                                 </p>
                               </div>
-                            </div>
+                            </button>
                           </div>
                         ))
                       }

@@ -71,6 +71,7 @@ const App = ({ config }) => {
 
   return groups && (
     <main>
+      <h1 className="visually-hidden">{brandText ?? document.title}</h1>
       <Nav
         onZoom={(delta) => zoomMaps(view, delta)}
         onSearch={(place) => fitMapsToExtent(view, getPlaceExtent(place), searchMaxZoom)}

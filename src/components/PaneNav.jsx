@@ -16,7 +16,10 @@ const PaneNav = ({ pane }) => {
   const show = useConfig((s) => s.show)
 
   return (
-    <nav className="position-absolute bottom-0 start-0 d-flex flex-column align-items-start mw-100">
+    <nav
+      className="position-absolute bottom-0 start-0 d-flex flex-column align-items-start mw-100"
+      aria-label={strings.paneControls.replace('{name}', findMap(groups, pane.map)?.name ?? '')}
+    >
       {
         showLabels && (
           <div className="pane-label bg-body shadow rounded-3 small px-2 py-1 mx-3 mb-2 text-truncate">
@@ -28,7 +31,10 @@ const PaneNav = ({ pane }) => {
         {
           show.modal && (
             <div className="btn-group shadow rounded-3">
-              <button className="btn btn-control" onClick={() => openMapModal(pane)} title={strings.chooseMap}>
+              <button
+                className="btn btn-control" onClick={() => openMapModal(pane)} title={strings.chooseMap}
+                aria-label={strings.chooseMap}
+              >
                 <i className="bi bi-map"></i>
               </button>
             </div>
@@ -43,13 +49,13 @@ const PaneNav = ({ pane }) => {
                   <>
                     <button
                       className="btn btn-control" onClick={() => splitPane(pane, 'vertical')}
-                      title={strings.splitVertical}
+                      title={strings.splitVertical} aria-label={strings.splitVertical}
                     >
                       <i className="bi bi-arrows-expand-vertical"></i>
                     </button>
                     <button
                       className="btn btn-control" onClick={() => splitPane(pane, 'horizontal')}
-                      title={strings.splitHorizontal}
+                      title={strings.splitHorizontal} aria-label={strings.splitHorizontal}
                     >
                       <i className="bi bi-arrows-expand"></i>
                     </button>
@@ -58,7 +64,10 @@ const PaneNav = ({ pane }) => {
               }
               {
                 pane.level > 0 && (
-                  <button className="btn btn-control" onClick={() => removePane(pane)} title={strings.closePane}>
+                  <button
+                    className="btn btn-control" onClick={() => removePane(pane)} title={strings.closePane}
+                    aria-label={strings.closePane}
+                  >
                     <i className="bi bi-x-lg"></i>
                   </button>
                 )
